@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#2D3A3A">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPP"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="37dp"
+        app:cardCornerRadius="100dp"
+        android:background="@android:color/transparent">
+
+        <ImageView
+            android:id="@+id/ivPP"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:src="@drawable/pp_def_nav"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvNamaPetugas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hi, "
+        android:fontFamily="@font/poppins_extrabold"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/cvPP"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="16dp"/>
+    
+</androidx.constraintlayout.widget.ConstraintLayout>

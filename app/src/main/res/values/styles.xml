@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="bottomNavStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#79c383</item>
+        <item name="colorSecondaryVariant">#79c383</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
+    <style name="fab_circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">100dp</item>
+        <item name="android:background">@color/green</item>
+    </style>
+
+
+</resources>

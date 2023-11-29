@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    android:background="#2D3A3A">
+
+    <item android:id="@+id/miprofile"
+        android:title="Profile"
+        android:icon="@drawable/profile_nav"/>
+
+    <item android:id="@+id/milogout"
+        android:title="logout"
+        android:icon="@drawable/logout_nav"/>
+
+</menu>

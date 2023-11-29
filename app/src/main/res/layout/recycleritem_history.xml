@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="15dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="17dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ri_bg_history">
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="115dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ri_def_history"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvNoPohon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="000"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@id/ivImage"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:id="@+id/tvProyek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyek Dummy"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/tvNoPohon"
+                app:layout_constraintStart_toEndOf="@id/ivImage"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="-2dp"/>
+
+            <ImageView
+                android:id="@+id/ivCalendar"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintStart_toEndOf="@id/ivImage"
+                app:layout_constraintTop_toBottomOf="@id/tvProyek"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvTanggal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00 Bulan 0000"
+                android:textSize="12sp"
+                android:textColor="#868686"
+                app:layout_constraintStart_toEndOf="@id/ivCalendar"
+                app:layout_constraintTop_toTopOf="@id/ivCalendar"
+                app:layout_constraintBottom_toBottomOf="@id/ivCalendar"
+                android:layout_marginStart="7dp"/>
+
+            <ImageView
+                android:id="@+id/ivClock"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_clock"
+                app:layout_constraintStart_toEndOf="@id/ivImage"
+                app:layout_constraintTop_toBottomOf="@id/ivCalendar"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvJam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 AM"
+                android:textSize="12sp"
+                android:textColor="#868686"
+                app:layout_constraintStart_toEndOf="@id/ivClock"
+                app:layout_constraintTop_toTopOf="@id/ivClock"
+                app:layout_constraintBottom_toBottomOf="@id/ivClock"
+                android:layout_marginStart="7dp"/>
+
+            <ImageView
+                android:id="@+id/ivPeople"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_people"
+                app:layout_constraintStart_toEndOf="@id/ivImage"
+                app:layout_constraintTop_toBottomOf="@id/ivClock"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvPetugas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Person People"
+                android:textSize="12sp"
+                android:textColor="#868686"
+                app:layout_constraintStart_toEndOf="@id/ivPeople"
+                app:layout_constraintTop_toTopOf="@id/ivPeople"
+                app:layout_constraintBottom_toBottomOf="@id/ivPeople"
+                android:layout_marginStart="7dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
