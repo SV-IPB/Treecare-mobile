@@ -21,9 +21,11 @@ class PengamatanVisualActivity : AppCompatActivity() {
 
         val nomorPohon = intent.getStringExtra("nomor")
         val codeResponse = intent.getStringExtra("responseCode")
+        val idPohon = intent.getStringExtra("idPohon")
         val bundle = Bundle().apply {
             putString("nomor", nomorPohon)
             putString("responseCode", codeResponse)
+            putString("idPohon", idPohon)
         }
 
         val fragmentManager: FragmentManager = supportFragmentManager

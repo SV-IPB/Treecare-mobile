@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
@@ -205,12 +206,11 @@ class MainActivity : AppCompatActivity() {
 
                     retro.logOut(authToken).execute()
                     preferenceManager.removeData()
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                     return
                 }
-
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {

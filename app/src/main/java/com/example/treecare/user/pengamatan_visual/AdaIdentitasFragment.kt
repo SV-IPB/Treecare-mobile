@@ -20,11 +20,14 @@ import com.example.treecare.service.api.v1.RetrofitHelperV1
 import com.example.treecare.service.api.v1.RiwayatPohonService
 import com.example.treecare.service.api.v1.TokenAuthenticator
 import com.example.treecare.service.api.v1.response.RiwayatPohonsResponse
+import com.example.treecare.service.model.IdentitasPohonModel
 import com.example.treecare.service.model.RiwayatPohonModel
+import com.example.treecare.service.model.UserModel
 import com.example.treecare.user.RiwayatPengamatanActivity
 import com.example.treecare.user.identitas_pohon.DetailIndentitasPohonActivity
 import com.example.treecare.user.karakteristik_pohon.TambahKarakteristikPohonActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -67,6 +70,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         nomorPohon = requireArguments().getString("nomor").toString()
         codeResponse = requireArguments().getString("responseCode")
         idPohon = requireArguments().getString("idPohon")
+        Log.e("LOGGING FROM ADAIDENTITASRFRAGMENT-------> ",idPohon.toString())
         return view
     }
 
@@ -99,6 +103,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
 
         preferenceManager = PreferenceManager(requireContext())
         tvNoRiwayat.text = "nomor $nomorPohon code $codeResponse"
+        tvNoRiwayat.visibility = View.GONE
         rvPengamatan = view.findViewById(R.id.rvPengamatan)
 
         rvPengamatan.layoutManager = LinearLayoutManager(
@@ -139,10 +144,16 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatPohonsResponse>, response: Response<RiwayatPohonsResponse>) {
 
+                Log.e("Raw Response riwayat: ", response.raw().toString())
+                val gson = GsonBuilder().setPrettyPrinting().create()
+                val responseBody = gson.toJson(response.body())
+                Log.e("Body riwayat: ", responseBody)
                 var body = response.body()
 
                 for (riwayat in body?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
+                    var user = UserModel()
+                    var identitasPohon = IdentitasPohonModel()
 
                     newRiwayat.keliling = riwayat.keliling
                     newRiwayat.tinggi = riwayat.tinggi
@@ -169,11 +180,16 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
                     newRiwayat.jam = riwayat.jam
                     newRiwayat.tanggal = riwayat.tanggal
 
-                    newRiwayat.user?.nama = riwayat.user?.name
+                    user.nama = riwayat.user?.name
 
-                    newRiwayat.identitasPohon?.id = riwayat.identitasPohon?.id
-                    newRiwayat.identitasPohon?.gambar = riwayat.identitasPohon?.gambar
-                    newRiwayat.identitasPohon?.nomorPohon = riwayat.identitasPohon?.nomorPohon
+                    identitasPohon.id = riwayat.identitasPohon?.id
+                    identitasPohon.gambar = riwayat.identitasPohon?.gambar.toString()
+                    identitasPohon.nomorPohon = riwayat.identitasPohon?.nomorPohon
+                    identitasPohon.namaProjek = riwayat.identitasPohon?.namaProyek.toString()
+
+                    //Initiate new data class in newRiwayat
+                    newRiwayat.identitasPohon = identitasPohon
+                    newRiwayat.user = user
 
                     listRiwayat.add(newRiwayat)
                 }
@@ -188,9 +204,19 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
     }
 
     override fun onItemClick(position: Int) {
+
+        val data = listRiwayat.get(position)
+
+        val extras = Bundle()
+        extras.putString("tanggal", data.tanggal)
+        extras.putString("jam", data.jam)
+        extras.putString("petugas", data.user?.nama)
+
         val intent = Intent(requireContext(), RiwayatPengamatanActivity::class.java)
         intent.putExtra("nomor",nomorPohon)
         intent.putExtra("responseCode",codeResponse)
+        intent.putExtra("idRiwayat", data.id)
+        intent.putExtra("dataRiwayat", extras)
         startActivity(intent)
     }
 }

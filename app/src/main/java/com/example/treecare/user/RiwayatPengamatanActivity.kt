@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.R
 import com.example.treecare.user.karakteristik_pohon.DetailKarakteristikPohonActivity
@@ -27,6 +28,15 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
         val btnKondisi: AppCompatButton = findViewById(R.id.btnKondisi)
         val btnTarget: AppCompatButton = findViewById(R.id.btnTarget)
 
+        val bundle = intent.getBundleExtra("dataRiwayat")
+        val idRiwayat = intent.getStringExtra("idRiwayat")
+        findViewById<TextView>(R.id.tvJam)
+            .setText(bundle?.getString("jam"))
+        findViewById<TextView>(R.id.tvPetugas)
+            .setText(bundle?.getString("petugas"))
+        findViewById<TextView>(R.id.tvTanggal)
+            .setText(bundle?.getString("tanggal"))
+
         btnBack.setOnClickListener {
             val intent = Intent(this, PengamatanVisualActivity::class.java)
             startActivity(intent)
@@ -35,30 +45,35 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnKarakteristik.setOnClickListener {
             val intent = Intent(this, DetailKarakteristikPohonActivity::class.java)
+            intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
         }
 
         btnKesehatan.setOnClickListener {
             val intent = Intent(this, DetailKesehatanPohonActivity::class.java)
+            intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
         }
 
         btnKerusakan.setOnClickListener {
             val intent = Intent(this, ListKerusakanPohonActivity::class.java)
+            intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
         }
 
         btnKondisi.setOnClickListener {
             val intent = Intent(this, DetailKondisiTapakActivity::class.java)
+            intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
         }
 
         btnTarget.setOnClickListener {
             val intent = Intent(this, DetailTargetActivity::class.java)
+            intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
         }
