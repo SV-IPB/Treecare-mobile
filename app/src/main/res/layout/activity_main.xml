@@ -57,7 +57,8 @@
                 app:labelVisibilityMode="unlabeled"
                 app:itemIconTint="@color/white"
                 app:menu="@menu/bottom_nav_menu"
-                android:theme="@style/bottomNavStyle"/>
+                android:theme="@style/bottomNavStyle"
+                android:elevation="0dp"/>
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 

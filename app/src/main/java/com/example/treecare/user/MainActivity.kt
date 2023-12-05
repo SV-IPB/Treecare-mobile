@@ -51,12 +51,14 @@ class MainActivity : AppCompatActivity() {
             .toBuilder()
             .setAllCorners(CornerFamily.ROUNDED, 100f)
             .build()
+        bottomAppBar.elevation = 0f
 
         bottomNavView = findViewById(R.id.bottomNavView)
         bottomNavView.background = null
         bottomNavView.menu.getItem(1).isEnabled = false
         bottomNavView.menu.getItem(2).isEnabled = false
         bottomNavView.menu.getItem(3).isEnabled = false
+        bottomNavView.elevation = 0f
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setImageResource(R.drawable.scan_fab)
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                     fragmentTransactionBar.replace(R.id.flContainer, ProfileFragment())
                     fragmentTransactionBar.commit()
                     drawerLayout.closeDrawer(GravityCompat.START)
+                    ivSidebar.visibility = View.INVISIBLE
                     true
                 }
                 R.id.milogout -> {
