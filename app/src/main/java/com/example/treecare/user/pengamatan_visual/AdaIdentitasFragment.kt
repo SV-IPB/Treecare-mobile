@@ -2,11 +2,12 @@ package com.example.treecare.user.pengamatan_visual
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import com.example.treecare.R
 import com.example.treecare.user.identitas_pohon.DetailIndentitasPohonActivity
 import com.example.treecare.user.karakteristik_pohon.TambahKarakteristikPohonActivity
@@ -26,6 +27,8 @@ class AdaIdentitasFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var nomorPohon: String? = null
+    private var codeResponse: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +42,10 @@ class AdaIdentitasFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ada_identitas, container, false)
+        val view = inflater.inflate(R.layout.fragment_ada_identitas, container, false)
+        nomorPohon = requireArguments().getString("nomor")
+        codeResponse = requireArguments().getString("responseCode")
+        return view
     }
 
     companion object {
@@ -68,9 +73,14 @@ class AdaIdentitasFragment : Fragment() {
 
         val clIdentitas: ConstraintLayout = view.findViewById(R.id.clIdentitas)
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
+        val tvNoRiwayat: TextView = view.findViewById(R.id.tvNoRiwayat)
+
+        tvNoRiwayat.text = "nomor $nomorPohon code $codeResponse"
 
         clIdentitas.setOnClickListener {
             val intent = Intent(context, DetailIndentitasPohonActivity::class.java)
+            intent.putExtra("nomor",nomorPohon)
+            intent.putExtra("responseCode",codeResponse)
             startActivity(intent)
             activity?.finish()
         }
