@@ -124,12 +124,13 @@ class CameraActivity : AppCompatActivity() {
         Retro.getByNomorPohon(nomorPohon,token).enqueue(object : Callback<IdentitasPohonResponse> {
             override fun onResponse(call: Call<IdentitasPohonResponse>, response: Response<IdentitasPohonResponse>) {
                 val gson = GsonBuilder().setPrettyPrinting().create()
-                val responseBody = gson.toJson(response.body())
+                val responseBody = response.body()
                 val responseCode = response.code()
-                Log.e("Body: ", responseBody)
+                Log.e("Body: ", gson.toJson(responseBody))
                 responseCodes = responseCode.toString()
                 intent.putExtra("responseCode", responseCode.toString())
                 intent.putExtra("nomor", tvValue.text)
+                intent.putExtra("idPohon", responseBody?.data?.id)
                 startActivity(intent)
                 finish()
             }

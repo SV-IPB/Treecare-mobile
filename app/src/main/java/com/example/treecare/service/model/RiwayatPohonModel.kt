@@ -1,9 +1,9 @@
 package com.example.treecare.service.model
 
-data class RiwayatPohonModel (
+data class RiwayatPohonModel(
     var id:                     String? = null,
-    var identitasPohonId:       String? = null,
-    var userId:                 String? = null,
+    var identitasPohon:         IdentitasPohonModel? = null,
+    var user:                   UserModel? = null,
     var keliling:               Float? = null,
     var tinggi:                 Float? = null,
     var lebarTajuk:             Float? = null,
@@ -25,7 +25,10 @@ data class RiwayatPohonModel (
     var pemanfaatanSekitar:     String? = null,
     var dapatDipindahkan:       Boolean? = null,
     var dapatDibatasi:          Boolean? = null,
-    var hunian:                 Boolean? = null
+    var hunian:                 String? = null,
+    var riwayatKerusakanPohon:  List<RiwayatKerusakanPohonModel>? = null,
+    var tanggal:                String? = null,
+    var jam:                    String? = null
 )
 //     constructor()
 //     constructor(

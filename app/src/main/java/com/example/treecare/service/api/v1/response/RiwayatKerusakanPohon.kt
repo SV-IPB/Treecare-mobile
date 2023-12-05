@@ -3,7 +3,7 @@ package com.example.treecare.service.api.v1.response
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class RiwayatKerusakan (
+data class RiwayatKerusakanPohon (
 
     @SerializedName("id")
     @Expose

@@ -7,7 +7,7 @@ data class RiwayatPohon (
 
     @SerializedName("id")
     @Expose
-    var id: Float? = null,
+    var id: String? = null,
 
     @SerializedName("keliling")
     @Expose
@@ -27,7 +27,7 @@ data class RiwayatPohon (
 
     @SerializedName("live_crown_ratio")
     @Expose
-    var liveCrownRatio: String? = null,
+    var liveCrownRatio: Int? = null,
 
     @SerializedName("sejarah_pemangkasan")
     @Expose
@@ -104,5 +104,18 @@ data class RiwayatPohon (
 
     @SerializedName("jam")
     @Expose
-    var jam: String? = null
+    var jam: String? = null,
+
+    @SerializedName("riwayat_kerusakan_pohon")
+    @Expose
+    var riwayatKerusakanPohon: List<RiwayatKerusakanPohon>? = null,
+
+    @SerializedName("identitas_pohon")
+    @Expose
+    var identitasPohon: IdentitasPohon? = null,
+
+    @SerializedName("user")
+    @Expose
+    var user: User? = null
+
 )
