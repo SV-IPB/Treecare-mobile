@@ -1,7 +1,9 @@
 package com.example.treecare.service.api.v1
 
+import com.example.treecare.service.api.v1.request.IdentitasPohonRequest
 import com.example.treecare.service.api.v1.response.IdentitasPohonResponse
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -17,12 +19,14 @@ interface PohonService {
 
     @POST("pohon")
     fun createPohon(
+        @Body request: IdentitasPohonRequest,
         @Header("Authorization") accessToken: String?
     ):Call<IdentitasPohonResponse>
 
     @PUT("pohon/{id}")
     fun updatePohon(
         @Path("id") id: String?,
+        @Body request: IdentitasPohonRequest,
         @Header("Authorization") accessToken: String?
     ):Call<IdentitasPohonResponse>
 

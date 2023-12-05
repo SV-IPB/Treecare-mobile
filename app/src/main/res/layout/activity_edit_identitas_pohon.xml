@@ -73,7 +73,8 @@
                     android:id="@+id/ivFoto"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/img_placeholder"/>
+                    android:src="@drawable/img_placeholder"
+                    android:scaleType="centerCrop"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -105,14 +106,15 @@
                 app:layout_constraintTop_toBottomOf="@id/btnUbahFoto"
                 android:layout_marginTop="32dp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/etNomorPohon"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:background="@drawable/et_bg"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="14sp"
-                android:textColor="@color/black"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvNomorPohon"
                 android:layout_marginTop="11dp"
@@ -243,6 +245,21 @@
                 android:theme="@style/mySpinnerItemStyle"
                 android:entries="@array/Pemilik"/>
 
+            <EditText
+                    android:id="@+id/etPemilikLainnya"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:background="@drawable/et_bg"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sPemilik"
+                    android:layout_marginTop="11dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp" />
+
             <TextView
                 android:id="@+id/tvJenisPohon"
                 android:layout_width="wrap_content"
@@ -252,7 +269,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sPemilik"
+                app:layout_constraintTop_toBottomOf="@id/etPemilikLainnya"
                 android:layout_marginTop="32dp"/>
 
             <EditText

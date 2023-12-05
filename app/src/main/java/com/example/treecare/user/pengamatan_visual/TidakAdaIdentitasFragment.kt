@@ -76,6 +76,8 @@ class TidakAdaIdentitasFragment : Fragment() {
 
         btnTambah.setOnClickListener {
             val intent = Intent(context, TambahIdentitasPohonActivity::class.java)
+            intent.putExtra("nomor", nomorPohon)
+            intent.putExtra("responseCode", codeResponse)
             startActivity(intent)
             activity?.finish()
         }

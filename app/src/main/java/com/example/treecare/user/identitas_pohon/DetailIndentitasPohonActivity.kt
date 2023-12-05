@@ -40,6 +40,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var nomor: String
     private lateinit var codeResponse: String
+    private lateinit var id_pohon: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_indentitas_pohon)
@@ -81,6 +82,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, EditIdentitasPohonActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
+            intent.putExtra("id",id_pohon)
             startActivity(intent)
             finish()
         }
@@ -89,6 +91,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, RiwayatPerubahanActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
+            intent.putExtra("id",id_pohon)
             startActivity(intent)
             finish()
         }
@@ -115,7 +118,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
                 val imgUri = response.body()?.data?.gambar
                 Picasso.get().invalidate(imgUri)
                 Picasso.get().load(imgUri).into(ivFoto)
-
+                id_pohon = response.body()?.data?.id.toString()
                 etNomorPohon.text = response.body()?.data?.nomorPohon
                 etAlamat.text = response.body()?.data?.alamat
                 tvCoordinate.text = "$latitude, $longitude"

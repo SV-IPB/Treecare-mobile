@@ -82,7 +82,8 @@
                     android:id="@+id/ivFoto"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/img_placeholder"/>
+                    android:src="@drawable/img_placeholder"
+                    android:scaleType="centerCrop"/>
 
             </androidx.cardview.widget.CardView>
 
