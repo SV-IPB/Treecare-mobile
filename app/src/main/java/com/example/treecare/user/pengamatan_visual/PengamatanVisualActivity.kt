@@ -20,10 +20,21 @@ class PengamatanVisualActivity : AppCompatActivity() {
         val btnBack: ImageView = findViewById(R.id.btnBack)
         val tvPengamatanVisual: TextView = findViewById(R.id.tvPengamatanVisual)
 
+        var nomorPohon = intent.getStringExtra("qr")
+        var codeResponse = intent.getStringExtra("responseCode")
+        tvPengamatanVisual.text = "Nomor: $nomorPohon, Code: $codeResponse"
+
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.flContainer, AdaIdentitasFragment())
-        fragmentTransaction.commit()
+
+        if (codeResponse == "404"){
+            fragmentTransaction.replace(R.id.flContainer, TidakAdaIdentitasFragment())
+            fragmentTransaction.commit()
+        }
+        if (codeResponse == "200"){
+            fragmentTransaction.replace(R.id.flContainer, AdaIdentitasFragment())
+            fragmentTransaction.commit()
+        }
 
 
         btnBack.setOnClickListener {

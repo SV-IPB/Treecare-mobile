@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASEURL = "hppt://localhost/api/v1/"
+const val BASEURL = "https://treecare.pegelinux.my.id/api/v1/"
 class RetrofitHelperV1 {
 
     private var retrofit: Retrofit? = null
