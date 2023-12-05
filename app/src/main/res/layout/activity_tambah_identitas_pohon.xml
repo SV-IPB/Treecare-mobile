@@ -73,7 +73,8 @@
                     android:id="@+id/ivFoto"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/img_placeholder"/>
+                    android:src="@drawable/img_placeholder"
+                    android:scaleType="centerCrop"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -140,7 +141,7 @@
                 android:id="@+id/btnPilihLokasi"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
-                android:text="Pilih Peta"
+                android:text="Lokasi Sekarang"
                 android:textAllCaps="false"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="14sp"
