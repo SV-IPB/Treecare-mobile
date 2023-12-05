@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -18,6 +19,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.treecare.LoginActivity
 import com.example.treecare.R
+import com.example.treecare.service.PreferenceManager
+import com.example.treecare.service.api.v1.RetrofitHelperV1
+import com.example.treecare.service.api.v1.TokenAuthenticator
+import com.example.treecare.service.api.v1.UserService
+import com.example.treecare.service.api.v1.response.UserResponse
 import com.example.treecare.user.camera.CameraActivity
 import com.example.treecare.user.identitas_pohon.TambahIdentitasPohonActivity
 import com.example.treecare.user.kerusakan_pohon.DetailKerusakanPohonActivity
@@ -31,11 +37,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
+import okhttp3.OkHttpClient
 import org.osmdroid.config.Configuration
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavView: BottomNavigationView
+    private lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavView.menu.getItem(2).isEnabled = false
         bottomNavView.menu.getItem(3).isEnabled = false
         bottomNavView.elevation = 0f
+
+        // check current user
+        preferenceManager = PreferenceManager(this)
+        checkUser()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setImageResource(R.drawable.scan_fab)
@@ -140,9 +155,68 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
 
         btnLogoutDialog.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+
+            val authToken = preferenceManager.getAccessToken()
+            val tokenAuthenticator = TokenAuthenticator(preferenceManager)
+            val okHttpClient = OkHttpClient.Builder()
+                .authenticator(tokenAuthenticator)
+                .build()
+            val retro = RetrofitHelperV1()
+                .getApiClientAuth(okHttpClient)
+                .create(UserService::class.java)
+
+            retro.logOut(authToken).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+
+                    if (!response.isSuccessful) {
+                        return
+                    }
+
+                    Log.e("Success Request ", "Logout Success")
+
+                    preferenceManager.removeData()
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Log.e("Failure Request ", "Failed Logout")
+                }
+            })
         }
+    }
+
+    fun checkUser() {
+        val authToken = preferenceManager.getAccessToken()
+        val tokenAuthenticator = TokenAuthenticator(preferenceManager)
+        val okHttpClient = OkHttpClient.Builder()
+            .authenticator(tokenAuthenticator)
+            .build()
+        val retro = RetrofitHelperV1()
+            .getApiClientAuth(okHttpClient)
+            .create(UserService::class.java)
+
+        retro.currentUser(authToken).enqueue(object : Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+
+                if (!response.isSuccessful || response.code() >= 400) {
+                    Log.e("unSuccessful at MainActivity.kt", response.message().toString())
+
+                    retro.logOut(authToken).execute()
+                    preferenceManager.removeData()
+                    return
+                }
+
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Log.e("Failure request ", "")
+            }
+
+        })
     }
 }

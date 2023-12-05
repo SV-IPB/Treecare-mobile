@@ -8,10 +8,12 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.user.MainActivity
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
+import com.example.treecare.service.api.v1.TokenAuthenticator
 import com.example.treecare.service.api.v1.UserService
 import com.example.treecare.service.api.v1.request.LoginRequest
 import com.example.treecare.service.api.v1.response.UserResponse
 import com.google.android.material.textfield.TextInputEditText
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         preferenceManager = PreferenceManager(this)
+
+        checkAuthToken()
 
         btnLogin = findViewById(R.id.btnLogin)
         etUsername = findViewById(R.id.etUsername)
@@ -44,6 +48,17 @@ class LoginActivity : AppCompatActivity() {
                     etPassword.text.toString())
             }
         }
+    }
+
+    fun checkAuthToken() {
+
+        if (preferenceManager.getAccessToken().equals("")) {
+            return
+        }
+
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     protected fun logIn(username: String, password: String) {

@@ -2,11 +2,11 @@ package com.example.treecare.service.model
 
 data class IdentitasPohonModel (
     var id:             String? = null,
-    var nomorPohon:     Int? = null,
+    var nomorPohon:     String? = null,
     var gambar:         String? = null,
     var alamat:         String? = null,
-    var latitude:       String? = null,
-    var longitude:      String? = null,
+    var latitude:       Float? = null,
+    var longitude:      Float? = null,
     var namaProjek:     String? = null,
     var pemilik:        String? = null,
     var jenis:          String? = null,
