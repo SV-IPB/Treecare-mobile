@@ -21,7 +21,8 @@
             android:layout_gravity="top"
             android:layout_marginTop="50dp"
             android:layout_marginStart="37dp"
-            android:onClick="onSidebarClicked"/>
+            android:onClick="onSidebarClicked"
+            android:visibility="visible"/>
 
         <FrameLayout
             android:id="@+id/flContainer"
@@ -29,7 +30,7 @@
             android:layout_height="match_parent"
             app:layout_anchor="@id/ivSidebar"
             app:layout_anchorGravity="bottom"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="50dp"
             android:layout_marginBottom="90dp"
             android:layout_marginStart="37dp"
             android:layout_marginEnd="37dp"/>
@@ -67,7 +68,8 @@
             android:src="@drawable/scan_fab"
             android:tint="@color/white"
             app:layout_anchor="@id/bottomAppBar"
-            android:theme="@style/bottomNavStyle"/>
+            android:theme="@style/bottomNavStyle"
+            android:backgroundTint="@color/green"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

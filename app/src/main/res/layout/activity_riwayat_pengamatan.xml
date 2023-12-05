@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.RiwayatPengamatanActivity"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="37dp"/>
+
+    <TextView
+        android:id="@+id/tvRiwayatPengamatan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Riwayat Pengamatan"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="71dp"/>
+
+    <TextView
+        android:id="@+id/tvProfilePengamatan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Profile Pengamatan"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="37dp"/>
+
+    <ImageView
+        android:id="@+id/ivCalendar"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvProfilePengamatan"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/tvTanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00 Bulan 0000"
+        android:textSize="12sp"
+        android:textColor="#868686"
+        app:layout_constraintStart_toEndOf="@id/ivCalendar"
+        app:layout_constraintTop_toTopOf="@id/ivCalendar"
+        app:layout_constraintBottom_toBottomOf="@id/ivCalendar"
+        android:layout_marginStart="7dp"/>
+
+    <ImageView
+        android:id="@+id/ivClock"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivCalendar"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvJam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00 AM"
+        android:textSize="12sp"
+        android:textColor="#868686"
+        app:layout_constraintStart_toEndOf="@id/ivClock"
+        app:layout_constraintTop_toTopOf="@id/ivClock"
+        app:layout_constraintBottom_toBottomOf="@id/ivClock"
+        android:layout_marginStart="7dp"/>
+
+    <ImageView
+        android:id="@+id/ivPeople"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_people"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivClock"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvPetugas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Person People"
+        android:textSize="12sp"
+        android:textColor="#868686"
+        app:layout_constraintStart_toEndOf="@id/ivPeople"
+        app:layout_constraintTop_toTopOf="@id/ivPeople"
+        app:layout_constraintBottom_toBottomOf="@id/ivPeople"
+        android:layout_marginStart="7dp"/>
+
+    <TextView
+        android:id="@+id/tvDetailPengamatan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detail Pengamatan"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivPeople"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="37dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnKarakteristik"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Karakteristik Pohon"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:gravity="start|center"
+        android:background="@drawable/btn_bg_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDetailPengamatan"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnKesehatan"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Kesehatan Pohon"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:gravity="start|center"
+        android:background="@drawable/btn_bg_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnKarakteristik"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnKerusakan"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Kerusakan Pohon"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:gravity="start|center"
+        android:background="@drawable/btn_bg_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnKesehatan"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnKondisi"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Kondisi Tapak"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:gravity="start|center"
+        android:background="@drawable/btn_bg_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnKerusakan"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnTarget"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Target"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:gravity="start|center"
+        android:background="@drawable/btn_bg_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnKondisi"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:paddingStart="17dp"
+        android:paddingEnd="17dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

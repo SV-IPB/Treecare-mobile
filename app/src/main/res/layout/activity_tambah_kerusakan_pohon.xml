@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.kerusakan_pohon.TambahKerusakanPohonActivity"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="37dp"/>
+
+    <TextView
+        android:id="@+id/tvKerusakan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kerusakan-1"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="71dp"/>
+
+    <ScrollView
+        android:id="@+id/svForm"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="none"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="50dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvDeskripsi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dokumentasi Kerusakan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDeskripsi"
+                android:layout_marginTop="20dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvFoto"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFoto"
+                app:cardCornerRadius="12dp"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="11dp">
+
+                <ImageView
+                    android:id="@+id/ivFoto"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/img_placeholder"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvImage"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                app:layout_constraintStart_toEndOf="@id/cvFoto"
+                app:layout_constraintTop_toTopOf="@id/cvFoto"
+                app:layout_constraintBottom_toBottomOf="@id/cvFoto"
+                android:layout_marginStart="11dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/recycleritem_image"/>
+
+            <TextView
+                android:id="@+id/tvBagianPohon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bagian Pohon"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvFoto"
+                android:layout_marginTop="20dp"/>
+
+            <Spinner
+                android:id="@+id/sBagianPohon"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBagianPohon"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/BagianPohon" />
+
+            <TextView
+                android:id="@+id/tvDeskripsiKerusakan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi Kerusakan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sBagianPohon"
+                android:layout_marginTop="32dp"/>
+
+            <EditText
+                android:id="@+id/etDeskripsiKerusakan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@drawable/et_bg"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDeskripsiKerusakan"
+                android:layout_marginTop="11dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/tvPeringkatBahaya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peringkat Bahaya"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDeskripsiKerusakan"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/tvPotensiKegagalan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Potensi Kegagalan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPeringkatBahaya"
+                android:layout_marginTop="20dp"/>
+
+            <Spinner
+                android:id="@+id/sPotensiKegagalan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPotensiKegagalan"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/PotensiKegagalan" />
+
+            <TextView
+                android:id="@+id/tvUkuranBagian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ukuran Bagian"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sPotensiKegagalan"
+                android:layout_marginTop="20dp"/>
+
+            <Spinner
+                android:id="@+id/sUkuranBagian"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvUkuranBagian"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/UkuranBagian" />
+
+            <TextView
+                android:id="@+id/tvPeringkatTarget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peringkat Target"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sUkuranBagian"
+                android:layout_marginTop="20dp"/>
+
+            <Spinner
+                android:id="@+id/sPeringkatTarget"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPeringkatTarget"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/PeringkatTarget" />
+
+            <TextView
+                android:id="@+id/tvPBahaya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peringkat Bahaya"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sPeringkatTarget"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/tvPBahayaValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="30sp"
+                android:textColor="#dadada"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPBahaya"
+                android:layout_marginTop="7dp"/>
+
+            <TextView
+                android:id="@+id/tvPenurunanBahaya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Penurunan Bahaya"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPBahayaValue"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/tvKeperluanTindakan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keperluan adanya tindakan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPenurunanBahaya"
+                android:layout_marginTop="20dp"/>
+
+            <RadioGroup
+                android:id="@+id/rgKeperluanTindakan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvKeperluanTindakan">
+
+                <RadioButton
+                    android:id="@+id/rbYaTindakan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ya"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbTidakTindakan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="-12dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvPemangkasan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pemangkasan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgKeperluanTindakan"
+                android:layout_marginTop="20dp"/>
+
+            <Spinner
+                android:id="@+id/sPemangkasan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPemangkasan"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/Pemangkasan" />
+
+            <TextView
+                android:id="@+id/tvDeskripsiPemangkasan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi Pemangkasan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sPemangkasan"
+                android:layout_marginTop="32dp"/>
+
+            <EditText
+                android:id="@+id/etDeskripsiPemangkasan"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@drawable/et_bg"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDeskripsiPemangkasan"
+                android:layout_marginTop="11dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/tvPohonDipindahkan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pohon Dipindahkan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etDeskripsiPemangkasan"
+                android:layout_marginTop="20dp"/>
+
+            <RadioGroup
+                android:id="@+id/rgDipindahkan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPohonDipindahkan">
+
+                <RadioButton
+                    android:id="@+id/rbYaDipindahkan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ya"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbTidakDipindahkan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="-12dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvTargetDipindahkan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Target Dipindahkan"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgDipindahkan"
+                android:layout_marginTop="20dp"/>
+
+            <RadioGroup
+                android:id="@+id/rgTDipindahkan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTargetDipindahkan">
+
+                <RadioButton
+                    android:id="@+id/rbYaTDipindahkan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ya"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbTidakTDipindahkan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="-12dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvSaranLainnya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saran Lainnya"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgTDipindahkan"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/etSaranLainnya"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@drawable/et_bg"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSaranLainnya"
+                android:layout_marginTop="11dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSimpan"
+                android:layout_width="255dp"
+                android:layout_height="42dp"
+                android:text="Simpan Kerusakan"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/btn_edit_bg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etSaranLainnya"
+                android:layout_marginTop="30dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSelanjutnya"
+                android:layout_width="255dp"
+                android:layout_height="42dp"
+                android:text="Selanjutnya"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/btn_bg_peta"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSimpan"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

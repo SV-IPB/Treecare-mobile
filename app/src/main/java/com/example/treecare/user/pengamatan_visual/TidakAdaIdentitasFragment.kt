@@ -1,11 +1,14 @@
 package com.example.treecare.user.pengamatan_visual
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.R
+import com.example.treecare.user.identitas_pohon.TambahIdentitasPohonActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,5 +59,17 @@ class TidakAdaIdentitasFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val btnTambah: AppCompatButton = view.findViewById(R.id.btnTambah)
+
+        btnTambah.setOnClickListener {
+            val intent = Intent(context, TambahIdentitasPohonActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
     }
 }

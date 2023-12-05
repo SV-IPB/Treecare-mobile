@@ -14,7 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/btn_bg_peta">
+        android:background="@drawable/btn_bg_peta"
+        android:layout_marginTop="42dp">
 
         <ImageView
             android:id="@+id/ivMapIcon"

@@ -3,7 +3,7 @@
 
     <item android:id="@+id/mihome"
         android:title="Home"
-        android:icon="@drawable/home_nav"/>
+        android:icon="@drawable/nav_home"/>
 
     <item android:id="@+id/miPlaceholder1"
         android:title=""
@@ -19,5 +19,5 @@
 
     <item android:id="@+id/mihistory"
         android:title="History"
-        android:icon="@drawable/board_nav"/>
+        android:icon="@drawable/nav_history"/>
 </menu>

@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:name=".MyApplication"
@@ -16,6 +22,60 @@
         android:theme="@style/Theme.TreeCare"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
+        <activity
+            android:name=".user.target.DetailTargetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kondisi_tapak.DetailKondisiTapakActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kerusakan_pohon.DetailKerusakanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kerusakan_pohon.ListKerusakanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kesehatan_pohon.DetailKesehatanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.karakteristik_pohon.DetailKarakteristikPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.camera.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.RiwayatPerubahanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.RiwayatPengamatanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.target.TambahTargetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kondisi_tapak.TambahKondisiTapakActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kerusakan_pohon.TambahKerusakanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kerusakan_pohon.KerusakanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.kesehatan_pohon.TambahKesehatanPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.karakteristik_pohon.TambahKarakteristikPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.identitas_pohon.EditIdentitasPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.identitas_pohon.DetailIndentitasPohonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.identitas_pohon.TambahIdentitasPohonActivity"
+            android:exported="false" />
         <activity
             android:name=".user.pengamatan_visual.PengamatanVisualActivity"
             android:exported="false" />
