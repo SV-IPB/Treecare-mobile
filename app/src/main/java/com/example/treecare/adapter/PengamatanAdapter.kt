@@ -1,6 +1,7 @@
 package com.example.treecare.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,10 +56,10 @@ class PengamatanAdapter (
         }
 
         holder.tvNoPohon.setText(noPohon)
-        holder.tvProyek.setText(riwayats.getOrNull(position)?.identitasPohon?.namaProjek)
+        holder.tvProyek.setText((riwayats.getOrNull(position)?.identitasPohon)?.namaProjek)
         holder.tvTanggal.setText(riwayats.getOrNull(position)?.tanggal)
         holder.tvJam.setText(riwayats.getOrNull(position)?.jam)
-        holder.tvPetugas.setText(riwayats.getOrNull(position)?.user?.nama)
+        holder.tvPetugas.setText((riwayats.getOrNull(position)?.user)?.nama)
     }
 
     override fun getItemCount(): Int {
