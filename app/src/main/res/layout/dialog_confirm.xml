@@ -9,7 +9,7 @@
         android:id="@+id/tvText"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Setelah menyimpan pengamatan, kamu tidak dapat mengubahnya kembali. Apakah kamu yakin untuk menyimpang pengamatan?"
+        android:text="Setelah menyimpan pengamatan, kamu tidak dapat mengubahnya kembali. Apakah kamu yakin untuk menyimpan pengamatan?"
         android:fontFamily="@font/poppins_medium"
         android:textColor="@color/black"
         android:textSize="14sp"

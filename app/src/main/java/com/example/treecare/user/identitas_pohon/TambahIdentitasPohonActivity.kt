@@ -43,7 +43,7 @@ class TambahIdentitasPohonActivity : AppCompatActivity() {
         }
 
         mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-        mapView.controller.setZoom(20.0)
+        mapView.controller.setZoom(17.0)
         mapView.controller.setCenter(GeoPoint(-6.5971,106.8060))
 
         btnBack.setOnClickListener {
