@@ -129,7 +129,7 @@ class CameraActivity : AppCompatActivity() {
                 Log.e("Body: ", responseBody)
                 responseCodes = responseCode.toString()
                 intent.putExtra("responseCode", responseCode.toString())
-                intent.putExtra("qr", tvValue.text)
+                intent.putExtra("nomor", tvValue.text)
                 startActivity(intent)
                 finish()
             }

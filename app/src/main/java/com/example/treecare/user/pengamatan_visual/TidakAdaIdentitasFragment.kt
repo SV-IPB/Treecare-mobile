@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.R
 import com.example.treecare.user.identitas_pohon.TambahIdentitasPohonActivity
@@ -14,6 +15,8 @@ import com.example.treecare.user.identitas_pohon.TambahIdentitasPohonActivity
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private var nomorPohon: String? = null
+private var codeResponse: String? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -37,8 +40,10 @@ class TidakAdaIdentitasFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tidak_ada_identitas, container, false)
+        val view = inflater.inflate(R.layout.fragment_tidak_ada_identitas, container, false)
+        nomorPohon = requireArguments().getString("nomor")
+        codeResponse = requireArguments().getString("responseCode")
+        return view
     }
 
     companion object {
@@ -65,6 +70,9 @@ class TidakAdaIdentitasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val btnTambah: AppCompatButton = view.findViewById(R.id.btnTambah)
+        val tvKet: TextView = view.findViewById(R.id.tvKet)
+
+        tvKet.text = "nomor $nomorPohon code $codeResponse"
 
         btnTambah.setOnClickListener {
             val intent = Intent(context, TambahIdentitasPohonActivity::class.java)
