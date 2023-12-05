@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="126dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/btnAZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A-Z"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="14dp"/>
+
+    <TextView
+        android:id="@+id/btnZA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z-A"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAZ"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:id="@+id/btnTerbaru"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terbaru"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnZA"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:id="@+id/btnTerlama"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terlama"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTerbaru"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

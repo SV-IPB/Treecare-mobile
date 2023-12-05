@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.kondisi_tapak.TambahKondisiTapakActivity"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="37dp"/>
+
+    <TextView
+        android:id="@+id/tvKondisiTapak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kondisi Tapak"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="71dp"/>
+
+    <TextView
+        android:id="@+id/tvKarakteristikTapak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Karakteristik Tapak"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvKondisiTapak"
+        android:layout_marginTop="35dp"
+        android:layout_marginStart="37dp"/>
+
+    <Spinner
+        android:id="@+id/sKarakteristikTapak"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvKarakteristikTapak"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/spinner_bg"
+        android:theme="@style/mySpinnerItemStyle"
+        android:entries="@array/KarakteristikTapak"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"/>
+
+    <EditText
+        android:id="@+id/etKarakteristikLainnya"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/et_bg"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sKarakteristikTapak"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginStart="37dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <TextView
+        android:id="@+id/tvGangguan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gaungguan tapak saat ini"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etKarakteristikLainnya"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="37dp"/>
+
+    <RadioGroup
+        android:id="@+id/rgGangguan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvGangguan"
+        android:layout_marginStart="37dp">
+
+        <RadioButton
+            android:id="@+id/rbYaGangguan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ya"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="-5dp"/>
+
+        <RadioButton
+            android:id="@+id/rbTidakGangguan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="-12dp"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvMasalahTanah"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masalah Tanah"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgGangguan"
+        android:layout_marginTop="27dp"
+        android:layout_marginStart="37dp"/>
+
+    <Spinner
+        android:id="@+id/sMasalahTanah"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMasalahTanah"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/spinner_bg"
+        android:theme="@style/mySpinnerItemStyle"
+        android:entries="@array/MasalahTanah"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"/>
+
+    <EditText
+        android:id="@+id/etMasalahTanahLainnya"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/et_bg"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sMasalahTanah"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginStart="37dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <TextView
+        android:id="@+id/tvGangguanLainnya"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gangguan Lainnya"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etMasalahTanahLainnya"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="37dp"/>
+
+    <Spinner
+        android:id="@+id/sGangguanLainnya"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvGangguanLainnya"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/spinner_bg"
+        android:theme="@style/mySpinnerItemStyle"
+        android:entries="@array/GangguanLainnya"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"/>
+
+    <EditText
+        android:id="@+id/etGangguanLainnya"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/et_bg"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sGangguanLainnya"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginStart="37dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSelanjutnya"
+        android:layout_width="255dp"
+        android:layout_height="42dp"
+        android:text="Selanjutnya"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:background="@drawable/btn_bg_peta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

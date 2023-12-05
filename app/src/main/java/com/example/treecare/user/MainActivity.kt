@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
@@ -17,6 +18,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.treecare.LoginActivity
 import com.example.treecare.R
+import com.example.treecare.user.camera.CameraActivity
+import com.example.treecare.user.identitas_pohon.TambahIdentitasPohonActivity
+import com.example.treecare.user.kerusakan_pohon.DetailKerusakanPohonActivity
+import com.example.treecare.user.kerusakan_pohon.KerusakanPohonActivity
+import com.example.treecare.user.kerusakan_pohon.TambahKerusakanPohonActivity
+import com.example.treecare.user.kondisi_tapak.TambahKondisiTapakActivity
 import com.example.treecare.user.pengamatan_visual.PengamatanVisualActivity
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
+import org.osmdroid.config.Configuration
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +41,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Configuration.getInstance().userAgentValue = "TreeCare/1.0 (Android; osmdroid)"
+
         val bottomAppBar = findViewById<BottomAppBar>(R.id.bottomAppBar)
+        val ivSidebar: ImageView = findViewById(R.id.ivSidebar)
 
         val bottomBarBackground = bottomAppBar.background as MaterialShapeDrawable
         bottomBarBackground.shapeAppearanceModel = bottomBarBackground.shapeAppearanceModel
@@ -57,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
 
         fab.setOnClickListener {
-            val intent = Intent(this, PengamatanVisualActivity::class.java)
+            val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -70,11 +81,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.mihome -> {
                     fragmentTransaction.replace(R.id.flContainer, HomeFragment())
                     fragmentTransaction.commit()
+                    ivSidebar.visibility = View.VISIBLE
                     true
                 }
                 R.id.mihistory -> {
                     fragmentTransaction.replace(R.id.flContainer, HistoryFragment())
                     fragmentTransaction.commit()
+                    ivSidebar.visibility = View.INVISIBLE
                     true
                 }
                 else -> false

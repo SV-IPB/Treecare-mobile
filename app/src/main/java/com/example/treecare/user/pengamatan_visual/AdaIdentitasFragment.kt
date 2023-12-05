@@ -1,11 +1,16 @@
 package com.example.treecare.user.pengamatan_visual
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.treecare.R
+import com.example.treecare.user.identitas_pohon.DetailIndentitasPohonActivity
+import com.example.treecare.user.karakteristik_pohon.TambahKarakteristikPohonActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,5 +61,24 @@ class AdaIdentitasFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val clIdentitas: ConstraintLayout = view.findViewById(R.id.clIdentitas)
+        val fab: FloatingActionButton = view.findViewById(R.id.fab)
+
+        clIdentitas.setOnClickListener {
+            val intent = Intent(context, DetailIndentitasPohonActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+        fab.setOnClickListener {
+            val intent = Intent(context, TambahKarakteristikPohonActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
     }
 }

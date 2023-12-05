@@ -2,6 +2,152 @@
     <string name="app_name">TreeCare</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="perkembangan_wound_wood">Perkembangan <i>Wound Wood</i></string>
+
+    <string-array name="Pemilik">
+        <item>Pribadi</item>
+        <item>Perusahaan</item>
+        <item>Pemerintahan</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="NilaiSpesialPohon">
+        <item>Heritage (pohon bersejarah)</item>
+        <item>Wildlife habitat (habitan hidupan liar)</item>
+        <item>Unusual</item>
+        <item>Street tree (pohon di jalan)</item>
+        <item>Screen</item>
+        <item>Shade (Pohon Peneduh)</item>
+        <item>Pohon yang dilindungi</item>
+        <item>Pohon Ornamen</item>
+    </string-array>
+
+    <string-array name="Bentuk">
+        <item>Simetris</item>
+        <item>Minor asimetris</item>
+        <item>Major asimetris</item>
+    </string-array>
+
+    <string-array name="SejarahPemangkasan">
+        <item>Crown cleaned</item>
+        <item>Excessively thinned</item>
+        <item>Topped</item>
+        <item>Crown Raised</item>
+        <item>Pollarded</item>
+        <item>Crown Reduced</item>
+        <item>Flushed cuts</item>
+        <item>Tidak diketahui</item>
+    </string-array>
+
+    <string-array name="WarnaDaun">
+        <item>Normal</item>
+        <item>Chlorotic</item>
+        <item>Necrotic</item>
+    </string-array>
+
+    <string-array name="KerapatanDaun">
+        <item>Rapat</item>
+        <item>Normal</item>
+        <item>Jarang</item>
+    </string-array>
+
+    <string-array name="WoundWood">
+        <item>Baik</item>
+        <item>Rata-rata</item>
+        <item>Jelek</item>
+        <item>Tidak ada</item>
+    </string-array>
+
+    <string-array name="Vigor">
+        <item>Baik</item>
+        <item>Rata-rata</item>
+        <item>Jelek</item>
+    </string-array>
+
+    <string-array name="KarakteristikTapak">
+        <item>Perumahan</item>
+        <item>Area komersial</item>
+        <item>Kawasan Industri</item>
+        <item>Taman</item>
+        <item>Ruang terbuka</item>
+        <item>Hutan</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="GangguanTapak">
+        <item>Konstruksi</item>
+        <item>Soil disturbances</item>
+        <item>Grade Change</item>
+        <item>Site clearing</item>
+    </string-array>
+
+    <string-array name="MasalahTanah">
+        <item>Compacted</item>
+        <item>Small volume</item>
+        <item>Clay</item>
+        <item>Disease center</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="GangguanLainnya">
+        <item>Lampu</item>
+        <item>Reklame</item>
+        <item>Utilitas bawah tanah</item>
+        <item>Lalu lintas</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="PemanfaatanArea">
+        <item>Gedung</item>
+        <item>Tempat parkir</item>
+        <item>Lalu lintas</item>
+        <item>Trotoar</item>
+        <item>Landscape</item>
+        <item>Hardscape</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="Hunian">
+        <item>Menetap</item>
+        <item>Kadang-Kadang</item>
+        <item>Berselang</item>
+        <item>Alami</item>
+        <item>Dapat mengkoreksi diri</item>
+    </string-array>
+
+    <string-array name="BagianPohon">
+        <item>Batang</item>
+        <item>Cabang</item>
+        <item>Akar</item>
+    </string-array>
+
+    <string-array name="PotensiKegagalan">
+        <item>1-Rendah</item>
+        <item>2-Rendah</item>
+        <item>3-Tinggi</item>
+        <item>4-Sangat Membahayakan</item>
+    </string-array>
+
+    <string-array name="UkuranBagian">
+        <item>1- &lt; 45cm</item>
+        <item>2– 45–135cm</item>
+        <item>3– 135–225cm</item>
+        <item>4- &gt; 225cm</item>
+    </string-array>
+
+    <string-array name="PeringkatTarget">
+        <item>1-Keberadaanya sesekali</item>
+        <item>2-Keberadaanya berselang</item>
+        <item>3-Keberadaanya sering</item>
+        <item>4-Keberadaanya tetap</item>
+    </string-array>
+
+    <string-array name="Pemangkasan">
+        <item>Remove defective part</item>
+        <item>Reduce end weight</item>
+        <item>Crown clean</item>
+        <item>Thin</item>
+        <item>Raised canopy</item>
+        <item>Crown reduced</item>
+    </string-array>
 </resources>

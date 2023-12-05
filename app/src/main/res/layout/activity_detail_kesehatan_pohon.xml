@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.kesehatan_pohon.DetailKesehatanPohonActivity"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="37dp"/>
+
+    <TextView
+        android:id="@+id/tvKesehatanPohon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kesehatan Pohon"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="71dp"/>
+
+    <ScrollView
+        android:id="@+id/svForm"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="none"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="50dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvWarnaDaun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Warna Daun"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/sWarnaDaun"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Warna"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWarnaDaun"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/WarnaDaun" />
+
+            <TextView
+                android:id="@+id/tvEpicormic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Epicormic"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sWarnaDaun"
+                android:layout_marginTop="35dp" />
+
+            <RadioGroup
+                android:id="@+id/rgEpicormic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvEpicormic">
+
+                <RadioButton
+                    android:id="@+id/rbYaEpicormic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ya"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbTidakEpicormic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="70dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvKerapatanDaun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kerapatan Daun"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgEpicormic"
+                android:layout_marginTop="27dp" />
+
+            <TextView
+                android:id="@+id/sKerapatanDaun"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Kerapatan"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvKerapatanDaun"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/KerapatanDaun" />
+
+            <TextView
+                android:id="@+id/tvUkuranDaun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ukuran Daun"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sKerapatanDaun"
+                android:layout_marginTop="35dp" />
+
+            <RadioGroup
+                android:id="@+id/rgUkuranDaun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvUkuranDaun">
+
+                <RadioButton
+                    android:id="@+id/rbNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbKecil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kecil"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="40dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvWoundWood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perkembangan_wound_wood"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgUkuranDaun"
+                android:layout_marginTop="27dp" />
+
+            <TextView
+                android:id="@+id/sWoundWood"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Perkembangan Wound Wood"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWoundWood"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/WoundWood" />
+
+            <TextView
+                android:id="@+id/tvTwigDieback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Twig Dieback"
+                android:fontFamily="@font/poppins_italic"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sWoundWood"
+                android:layout_marginTop="35dp" />
+
+            <RadioGroup
+                android:id="@+id/rgTwig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTwigDieback">
+
+                <RadioButton
+                    android:id="@+id/rbYaTwig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ya"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="-5dp"/>
+
+                <RadioButton
+                    android:id="@+id/rbTidakTwig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tidak"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="70dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvVigor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vigor"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgTwig"
+                android:layout_marginTop="27dp" />
+
+            <TextView
+                android:id="@+id/sVigor"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Vigor"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvVigor"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/spinner_bg"
+                android:theme="@style/mySpinnerItemStyle"
+                android:entries="@array/Vigor" />
+
+            <TextView
+                android:id="@+id/tvHama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hama"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sVigor"
+                android:layout_marginTop="32dp"/>
+
+            <TextView
+                android:id="@+id/etHama"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:text="Hama"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="14sp"
+                android:textColor="@color/disable"
+                android:gravity="center_vertical"
+                android:background="@drawable/et_bg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvHama"
+                android:layout_marginTop="11dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSelanjutnya"
+                android:layout_width="255dp"
+                android:layout_height="42dp"
+                android:text="Selanjutnya"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/btn_bg_peta"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etHama"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
