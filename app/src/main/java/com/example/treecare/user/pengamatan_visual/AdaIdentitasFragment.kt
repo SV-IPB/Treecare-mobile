@@ -51,6 +51,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
     private var codeResponse: String? = null
     private var idPohon: String? = null
     private lateinit var rvPengamatan: RecyclerView
+    private lateinit var tvNoRiwayat: TextView
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
@@ -99,11 +100,9 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
 
         val clIdentitas: ConstraintLayout = view.findViewById(R.id.clIdentitas)
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
-        val tvNoRiwayat: TextView = view.findViewById(R.id.tvNoRiwayat)
+        tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
 
         preferenceManager = PreferenceManager(requireContext())
-        tvNoRiwayat.text = "nomor $nomorPohon code $codeResponse"
-        tvNoRiwayat.visibility = View.GONE
         rvPengamatan = view.findViewById(R.id.rvPengamatan)
 
         rvPengamatan.layoutManager = LinearLayoutManager(
@@ -125,6 +124,9 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
 
         fab.setOnClickListener {
             val intent = Intent(context, TambahKarakteristikPohonActivity::class.java)
+            intent.putExtra("nomor",nomorPohon)
+            intent.putExtra("responseCode",codeResponse)
+            intent.putExtra("idPohon",idPohon)
             startActivity(intent)
             activity?.finish()
         }
@@ -150,7 +152,13 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
                 Log.e("Body riwayat: ", responseBody)
                 var body = response.body()
 
-                for (riwayat in body?.data!!) {
+                if (body?.data == null || body.data?.size == 0 ) {
+                    return
+                }
+
+                tvNoRiwayat.visibility = View.GONE
+
+                for (riwayat in body.data!!) {
                     var newRiwayat = RiwayatPohonModel()
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()

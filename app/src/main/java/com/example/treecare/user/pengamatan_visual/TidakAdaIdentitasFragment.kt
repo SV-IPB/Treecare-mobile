@@ -17,6 +17,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var nomorPohon: String? = null
 private var codeResponse: String? = null
+private var idPohon: String? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -43,6 +44,7 @@ class TidakAdaIdentitasFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_tidak_ada_identitas, container, false)
         nomorPohon = requireArguments().getString("nomor")
         codeResponse = requireArguments().getString("responseCode")
+        idPohon = requireArguments().getString("idPohon")
         return view
     }
 
@@ -72,7 +74,6 @@ class TidakAdaIdentitasFragment : Fragment() {
         val btnTambah: AppCompatButton = view.findViewById(R.id.btnTambah)
         val tvKet: TextView = view.findViewById(R.id.tvKet)
 
-        tvKet.text = "nomor $nomorPohon code $codeResponse"
 
         btnTambah.setOnClickListener {
             val intent = Intent(context, TambahIdentitasPohonActivity::class.java)
