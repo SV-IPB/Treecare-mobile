@@ -45,6 +45,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnKarakteristik.setOnClickListener {
             val intent = Intent(this, DetailKarakteristikPohonActivity::class.java)
+            intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
@@ -52,6 +53,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnKesehatan.setOnClickListener {
             val intent = Intent(this, DetailKesehatanPohonActivity::class.java)
+            intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
@@ -59,6 +61,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnKerusakan.setOnClickListener {
             val intent = Intent(this, ListKerusakanPohonActivity::class.java)
+            intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
@@ -66,6 +69,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnKondisi.setOnClickListener {
             val intent = Intent(this, DetailKondisiTapakActivity::class.java)
+            intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()
@@ -73,6 +77,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
 
         btnTarget.setOnClickListener {
             val intent = Intent(this, DetailTargetActivity::class.java)
+            intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
             finish()

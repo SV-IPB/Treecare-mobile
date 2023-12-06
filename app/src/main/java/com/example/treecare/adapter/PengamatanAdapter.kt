@@ -16,8 +16,7 @@ import com.squareup.picasso.Picasso
 class PengamatanAdapter (
     private var context: Context,
     private var riwayats: ArrayList<RiwayatPohonModel>,
-    private var listener: PengamatanInterface,
-    private var noPohon: String
+    private var listener: PengamatanInterface
 ) : RecyclerView.Adapter<PengamatanAdapter.MyViewHolder>(){
 
     inner class MyViewHolder(view: View):
@@ -55,7 +54,7 @@ class PengamatanAdapter (
             Picasso.get().load(riwayats.getOrNull(position)?.identitasPohon?.gambar).into(holder.ivImage)
         }
 
-        holder.tvNoPohon.setText(noPohon)
+        holder.tvNoPohon.setText((riwayats.getOrNull(position)?.identitasPohon)?.nomorPohon)
         holder.tvProyek.setText((riwayats.getOrNull(position)?.identitasPohon)?.namaProjek)
         holder.tvTanggal.setText(riwayats.getOrNull(position)?.tanggal)
         holder.tvJam.setText(riwayats.getOrNull(position)?.jam)
