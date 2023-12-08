@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import com.example.treecare.service.api.v1.response.RiwayatPohonsPagingResponse
 import com.example.treecare.service.model.IdentitasPohonModel
 import com.example.treecare.service.model.RiwayatPohonModel
 import com.example.treecare.service.model.UserModel
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -115,7 +117,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 val totalItemCount = layoutManager.itemCount
                 val percentageScrolled = (lastVisibleItemPosition + 1) / totalItemCount.toDouble()
 
-                if (percentageScrolled >= LOAD_MORE_THRESHOLD) {
+                if (percentageScrolled >= LOAD_MORE_THRESHOLD && page <= totalPage) {
                     loadNextPage()
                 }
             }
@@ -145,6 +147,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnAZ.setOnClickListener {
             this.sort = "nomor_pohon"
             this.sortType = "asc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -153,6 +156,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnZA.setOnClickListener {
             this.sort= "nomor_pohon"
             this.sortType = "desc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -161,6 +165,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnTerbaru.setOnClickListener {
             this.sort = "created_at"
             this.sortType = "desc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -169,6 +174,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnTerlama.setOnClickListener {
             this.sort = "created_at"
             this.sortType = "asc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -206,7 +212,9 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 }
 
                 var body = response.body()
-
+                val gson = GsonBuilder().setPrettyPrinting().create()
+                val responseBody = gson.toJson(body)
+                Log.e("LOG --->", responseBody)
                 if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
                     return
                 }
