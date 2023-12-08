@@ -109,7 +109,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             requireContext(),
             LinearLayoutManager.VERTICAL,
             false)
-        rvPengamatan.adapter = PengamatanAdapter(requireContext(), listRiwayat, this, nomorPohon)
+        rvPengamatan.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
 
         // Request get data riwayat
         getAllRiwayat()
@@ -138,18 +138,18 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         val okHttpClient = OkHttpClient.Builder()
             .authenticator(tokenAuthenticator)
             .build()
-        val retroHelperRiwayatPohon = RetrofitHelperV1()
+        val retroHelperRiwayatPohonService = RetrofitHelperV1()
             .getApiClientAuth(okHttpClient)
             .create(RiwayatPohonService::class.java)
 
-        retroHelperRiwayatPohon.getAllRiwayatPohonById(idPohon, authToken).enqueue(object : Callback<RiwayatPohonsResponse> {
+        retroHelperRiwayatPohonService.getAllRiwayatPohonById(idPohon, authToken).enqueue(object : Callback<RiwayatPohonsResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatPohonsResponse>, response: Response<RiwayatPohonsResponse>) {
 
                 Log.e("Raw Response riwayat: ", response.raw().toString())
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val responseBody = gson.toJson(response.body())
-                Log.e("Body riwayat: ", responseBody)
+
                 var body = response.body()
 
                 if (body?.data == null || body.data?.size == 0 ) {

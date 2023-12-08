@@ -1,6 +1,8 @@
 package com.example.treecare.user
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,7 +12,23 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
+import com.example.treecare.adapter.PengamatanAdapter
+import com.example.treecare.interfaces.PengamatanInterface
+import com.example.treecare.service.PreferenceManager
+import com.example.treecare.service.api.v1.RetrofitHelperV1
+import com.example.treecare.service.api.v1.RiwayatPohonService
+import com.example.treecare.service.api.v1.TokenAuthenticator
+import com.example.treecare.service.api.v1.response.RiwayatPohonsPagingResponse
+import com.example.treecare.service.model.IdentitasPohonModel
+import com.example.treecare.service.model.RiwayatPohonModel
+import com.example.treecare.service.model.UserModel
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +40,25 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HistoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), PengamatanInterface {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private lateinit var btnFilter: ImageView
+    private lateinit var tvNoRiwayat: TextView
+    private lateinit var rvHistory: RecyclerView
+    private lateinit var preferenceManager: PreferenceManager
+    private val listRiwayat = ArrayList<RiwayatPohonModel>()
+
+    private var sort: String = "created_at"
+    private var sortType: String = "desc"
+    private var page: Int = 1
+    private var pageSize: Int = 5
+    private var totalPage: Int = 1
+
+    private val LOAD_MORE_THRESHOLD = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +99,32 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        preferenceManager = PreferenceManager(requireContext())
         btnFilter = view.findViewById(R.id.btnFilter)
+        tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
+        rvHistory = view.findViewById(R.id.rvHistory)
 
+        rvHistory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        rvHistory.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
+
+        rvHistory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+                val percentageScrolled = (lastVisibleItemPosition + 1) / totalItemCount.toDouble()
+
+                if (percentageScrolled >= LOAD_MORE_THRESHOLD) {
+                    loadNextPage()
+                }
+            }
+        })
         btnFilter.setOnClickListener {
             showFilterDialog()
         }
+
+        getAllRiwayat()
     }
 
     fun showFilterDialog() {
@@ -91,16 +143,141 @@ class HistoryFragment : Fragment() {
         val btnTerlama:TextView = filterLogout.findViewById(R.id.btnTerlama)
 
         btnAZ.setOnClickListener {
+            this.sort = "nomor_pohon"
+            this.sortType = "asc"
 
+            listRiwayat.clear()
+            getAllRiwayat()
+            filterLogout.dismiss()
         }
         btnZA.setOnClickListener {
+            this.sort= "nomor_pohon"
+            this.sortType = "desc"
 
+            listRiwayat.clear()
+            getAllRiwayat()
+            filterLogout.dismiss()
         }
         btnTerbaru.setOnClickListener {
+            this.sort = "created_at"
+            this.sortType = "desc"
 
+            listRiwayat.clear()
+            getAllRiwayat()
+            filterLogout.dismiss()
         }
         btnTerlama.setOnClickListener {
+            this.sort = "created_at"
+            this.sortType = "asc"
 
+            listRiwayat.clear()
+            getAllRiwayat()
+            filterLogout.dismiss()
         }
+    }
+
+    private fun loadNextPage() {
+        this.page++
+        getAllRiwayat()
+    }
+
+    private fun getAllRiwayat() {
+        val authToken = preferenceManager.getAccessToken()
+        val tokenAuthenticator = TokenAuthenticator(preferenceManager)
+        val okHttpClient = OkHttpClient.Builder()
+            .authenticator(tokenAuthenticator)
+            .build()
+        val retroHelperRiwayatPohon = RetrofitHelperV1()
+            .getApiClientAuth(okHttpClient)
+            .create(RiwayatPohonService::class.java)
+
+        retroHelperRiwayatPohon.getAllRiwayat(this.sort, this.sortType, this.page, this.pageSize, authToken).enqueue(object :
+            Callback<RiwayatPohonsPagingResponse> {
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(
+                call: Call<RiwayatPohonsPagingResponse>,
+                response: Response<RiwayatPohonsPagingResponse>
+            ) {
+                if (!response.isSuccessful) {
+                    return
+                }
+
+                var body = response.body()
+
+                if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
+                    return
+                }
+
+                // if get data
+                tvNoRiwayat.visibility = View.GONE
+
+                for (riwayat in body?.data?.data!!) {
+                    var newRiwayat = RiwayatPohonModel()
+                    var user = UserModel()
+                    var identitasPohon = IdentitasPohonModel()
+
+                    newRiwayat.keliling = riwayat.keliling
+                    newRiwayat.tinggi = riwayat.tinggi
+                    newRiwayat.lebarTajuk = riwayat.lebarTajuk
+                    newRiwayat.bentuk = riwayat.bentuk
+                    newRiwayat.liveCrownRatio = riwayat.liveCrownRatio
+                    newRiwayat.sejarahPemangkasan = riwayat.sejarahPemangkasan
+                    newRiwayat.warnaDaun = riwayat.warnaDaun
+                    newRiwayat.epicormic = riwayat.epicormic
+                    newRiwayat.kerapatanDaun = riwayat.kerapatanDaun
+                    newRiwayat.ukuranDaun = riwayat.ukuranDaun
+                    newRiwayat.woundWood = riwayat.woundWood
+                    newRiwayat.twigDieback = riwayat.twigDieback
+                    newRiwayat.vigor = riwayat.vigor
+                    newRiwayat.hama = riwayat.hama
+                    newRiwayat.karakteristikTapak = riwayat.karakteristikTapak
+                    newRiwayat.gangguan = riwayat.gangguan
+                    newRiwayat.masalahTanah = riwayat.masalahTanah
+                    newRiwayat.gangguanLain = riwayat.gangguanLain
+                    newRiwayat.pemanfaatanSekitar = riwayat.pemanfaatanSekitar
+                    newRiwayat.dapatDipindahkan = riwayat.dapatDipindahkan
+                    newRiwayat.dapatDibatasi = riwayat.dapatDibatasi
+                    newRiwayat.hunian = riwayat.hunian
+                    newRiwayat.jam = riwayat.jam
+                    newRiwayat.tanggal = riwayat.tanggal
+
+                    user.nama = riwayat.user?.name
+
+                    identitasPohon.id = riwayat.identitasPohon?.id
+                    identitasPohon.gambar = riwayat.identitasPohon?.gambar.toString()
+                    identitasPohon.nomorPohon = riwayat.identitasPohon?.nomorPohon.toString()
+                    identitasPohon.namaProjek = riwayat.identitasPohon?.namaProyek.toString()
+
+                    //Initiate new data class in newRiwayat
+                    newRiwayat.identitasPohon = identitasPohon
+                    newRiwayat.user = user
+
+                    listRiwayat.add(newRiwayat)
+                }
+
+                rvHistory.adapter?.notifyDataSetChanged()
+            }
+            override fun onFailure(call: Call<RiwayatPohonsPagingResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    override fun onItemClick(position: Int) {
+        val data = listRiwayat[position]
+
+        val extras = Bundle()
+        extras.putString("tanggal", data.tanggal)
+        extras.putString("jam", data.jam)
+        extras.putString("petugas", data.user?.nama)
+
+        val intent = Intent(requireContext(), RiwayatPengamatanActivity::class.java)
+        intent.putExtra("nomor", data.identitasPohon?.nomorPohon)
+        intent.putExtra("responseCode", "200")
+        intent.putExtra("idRiwayat", data.id)
+        intent.putExtra("dataRiwayat", extras)
+        startActivity(intent)
     }
 }
