@@ -177,8 +177,10 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     }
 
     private fun loadNextPage() {
-        this.page++
-        getAllRiwayat()
+        if (this.page <= this.totalPage) {
+            this.page++
+            getAllRiwayat()
+        }
     }
 
     private fun getAllRiwayat() {
@@ -211,6 +213,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
                 // if get data
                 tvNoRiwayat.visibility = View.GONE
+                totalPage = body.data?.totalPage!!
 
                 for (riwayat in body?.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
