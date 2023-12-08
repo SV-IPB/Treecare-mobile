@@ -2,16 +2,21 @@ package com.example.treecare.user
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +55,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     private lateinit var btnFilter: ImageView
     private lateinit var tvNoRiwayat: TextView
     private lateinit var rvHistory: RecyclerView
+    private lateinit var searchEditText: EditText
+    private lateinit var searchIcon: ImageView
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
@@ -104,6 +111,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         preferenceManager = PreferenceManager(requireContext())
         btnFilter = view.findViewById(R.id.btnFilter)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
+        searchEditText = view.findViewById(R.id.searchEditText)
+        searchIcon = view.findViewById(R.id.searchIcon)
         rvHistory = view.findViewById(R.id.rvHistory)
 
         rvHistory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -121,6 +130,31 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                     loadNextPage()
                 }
             }
+        })
+        searchEditText.setOnKeyListener(View.OnKeyListener{v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+
+                this.page = 1
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+                searchEditText.clearFocus()
+                listRiwayat.clear()
+                getAllRiwayat(searchEditText.text.toString())
+
+                return@OnKeyListener true
+            }
+            false
+        })
+        searchIcon.setOnClickListener(View.OnClickListener { v ->
+            this.page = 1
+
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+            searchEditText.clearFocus()
+            listRiwayat.clear()
+            getAllRiwayat(searchEditText.text.toString())
         })
         btnFilter.setOnClickListener {
             showFilterDialog()
@@ -189,7 +223,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         }
     }
 
-    private fun getAllRiwayat() {
+    private fun getAllRiwayat(keyword: String?=null) {
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -199,8 +233,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             .getApiClientAuth(okHttpClient)
             .create(RiwayatPohonService::class.java)
 
-        retroHelperRiwayatPohon.getAllRiwayat(this.sort, this.sortType, this.page, this.pageSize, authToken).enqueue(object :
-            Callback<RiwayatPohonsPagingResponse> {
+        val callback = object : Callback<RiwayatPohonsPagingResponse> {
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -212,9 +245,6 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 }
 
                 var body = response.body()
-                val gson = GsonBuilder().setPrettyPrinting().create()
-                val responseBody = gson.toJson(body)
-                Log.e("LOG --->", responseBody)
                 if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
                     return
                 }
@@ -273,7 +303,30 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 TODO("Not yet implemented")
             }
 
-        })
+        }
+
+        if (keyword != null) {
+            // Request with keyword
+            retroHelperRiwayatPohon.getAllRiwayatByKeyword(
+                keyword,
+                this.sort,
+                this.sortType,
+                this.page,
+                this.pageSize,
+                authToken
+            ).enqueue(callback)
+
+        } else {
+            // Request without keyword
+            retroHelperRiwayatPohon.getAllRiwayat(
+                this.sort,
+                this.sortType,
+                this.page,
+                this.pageSize,
+                authToken
+            ).enqueue(callback)
+
+        }
     }
 
     override fun onItemClick(position: Int) {

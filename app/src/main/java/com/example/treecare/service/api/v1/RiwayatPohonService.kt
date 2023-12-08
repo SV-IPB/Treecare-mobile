@@ -45,4 +45,14 @@ interface RiwayatPohonService {
         @Query("pageSize") pageSize: Int,
         @Header("Authorization") accessToken: String?
     ): Call<RiwayatPohonsPagingResponse>
+
+    @GET("pohon/allriwayat")
+    fun getAllRiwayatByKeyword(
+        @Query("keyword") keyword: String,
+        @Query("sort") sort: String,
+        @Query("sortType") sortType: String,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+        @Header("Authorization") accessToken: String?
+    ): Call<RiwayatPohonsPagingResponse>
 }

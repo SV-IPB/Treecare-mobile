@@ -44,7 +44,9 @@
             android:textColorHint="@color/disable"
             android:textColor="@color/black"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"/>
+            android:paddingEnd="10dp"
+            android:inputType="text"
+            android:imeOptions="actionGo"/>
 
         <ImageView
             android:id="@+id/searchIcon"
