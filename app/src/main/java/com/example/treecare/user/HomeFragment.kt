@@ -1,7 +1,9 @@
 package com.example.treecare.user
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
@@ -22,6 +25,7 @@ import com.example.treecare.service.api.v1.response.RiwayatPohonsPagingResponse
 import com.example.treecare.service.model.IdentitasPohonModel
 import com.example.treecare.service.model.RiwayatPohonModel
 import com.example.treecare.service.model.UserModel
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,6 +48,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var rvHome: RecyclerView
+    private lateinit var tvNoRiwayat: TextView
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +94,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
         val searchIcon: ImageView = view.findViewById(R.id.searchIcon)
         val tvPengamatanTerbaru: TextView = view.findViewById(R.id.tvPengamatanTerbaru)
         rvHome = view.findViewById(R.id.rvHome)
+        tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
         preferenceManager = PreferenceManager(requireContext())
 
         rvHome.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -103,9 +109,11 @@ class HomeFragment : Fragment(), PengamatanInterface {
                 tvPengamatanTerbaru.visibility = View.INVISIBLE
             }
         }
+
+        getAllRiwayat()
     }
 
-    fun getAllRiwayat() {
+    private fun getAllRiwayat() {
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -117,16 +125,22 @@ class HomeFragment : Fragment(), PengamatanInterface {
 
         retroHelperRiwayatPohon.getAllRiwayat("created_at", "asc", 1, 5, authToken).enqueue(object : Callback<RiwayatPohonsPagingResponse> {
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<RiwayatPohonsPagingResponse>,
                 response: Response<RiwayatPohonsPagingResponse>
             ) {
+                if (!response.isSuccessful) {
+                    return
+                }
 
                 var body = response.body()
 
-                if (body?.data != null || body?.data?.data != null || body?.data?.data?.size == 0) {
+                if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
                     return
                 }
+
+                tvNoRiwayat.visibility = View.GONE
 
                 for (riwayat in body?.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
@@ -183,7 +197,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
     }
 
     override fun onItemClick(position: Int) {
-        val data = listRiwayat.get(position)
+        val data = listRiwayat[position]
 
         val extras = Bundle()
         extras.putString("tanggal", data.tanggal)
