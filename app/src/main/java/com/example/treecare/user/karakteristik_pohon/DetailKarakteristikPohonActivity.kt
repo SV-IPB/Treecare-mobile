@@ -12,10 +12,8 @@ import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
 import com.example.treecare.service.api.v1.RiwayatPohonService
 import com.example.treecare.service.api.v1.TokenAuthenticator
-import com.example.treecare.service.api.v1.UserService
 import com.example.treecare.service.api.v1.response.RiwayatPohonResponse
 import com.example.treecare.user.RiwayatPengamatanActivity
-import com.example.treecare.user.pengamatan_visual.PengamatanVisualActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback

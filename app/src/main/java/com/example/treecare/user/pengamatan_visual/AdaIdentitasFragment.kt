@@ -138,11 +138,11 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         val okHttpClient = OkHttpClient.Builder()
             .authenticator(tokenAuthenticator)
             .build()
-        val retroHelperRiwayatPohon = RetrofitHelperV1()
+        val retroHelperRiwayatPohonService = RetrofitHelperV1()
             .getApiClientAuth(okHttpClient)
             .create(RiwayatPohonService::class.java)
 
-        retroHelperRiwayatPohon.getAllRiwayatPohonById(idPohon, authToken).enqueue(object : Callback<RiwayatPohonsResponse> {
+        retroHelperRiwayatPohonService.getAllRiwayatPohonById(idPohon, authToken).enqueue(object : Callback<RiwayatPohonsResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatPohonsResponse>, response: Response<RiwayatPohonsResponse>) {
 
