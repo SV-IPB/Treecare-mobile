@@ -1,6 +1,7 @@
 package com.example.treecare.service.api.v1
 
 import com.example.treecare.service.api.v1.request.RiwayatPohonRequest
+import com.example.treecare.service.api.v1.response.RiwayatKerusakanPohonResponse
 import com.example.treecare.service.api.v1.response.RiwayatPohonResponse
 import com.example.treecare.service.api.v1.response.RiwayatPohonsPagingResponse
 import com.example.treecare.service.api.v1.response.RiwayatPohonsResponse
@@ -55,4 +56,10 @@ interface RiwayatPohonService {
         @Query("pageSize") pageSize: Int,
         @Header("Authorization") accessToken: String?
     ): Call<RiwayatPohonsPagingResponse>
+
+    @GET("pohon/kerusakan/{id}")
+    fun getKerusakanDetail(
+        @Path("id") id: String?,
+        @Header("Authorization") accessToken: String?
+    ): Call<RiwayatKerusakanPohonResponse>
 }

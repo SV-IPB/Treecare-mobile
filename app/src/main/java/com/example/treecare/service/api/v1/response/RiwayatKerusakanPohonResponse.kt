@@ -15,6 +15,6 @@ data class RiwayatKerusakanPohonResponse (
 
     @SerializedName("data")
     @Expose
-    var data: List<RiwayatKerusakanPohon>? = null
+    var data: RiwayatKerusakanPohon? = null
 
 )
