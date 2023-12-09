@@ -42,8 +42,8 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(this)
 
         btnBack.setOnClickListener {
-            val intent = Intent(this, RiwayatPengamatanActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, RiwayatPengamatanActivity::class.java)
+//            startActivity(intent)
             finish()
         }
 
@@ -94,8 +94,8 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        val intent = Intent(this, RiwayatPengamatanActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this, RiwayatPengamatanActivity::class.java)
+//        startActivity(intent)
         finish()
     }
 }

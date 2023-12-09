@@ -2,15 +2,21 @@ package com.example.treecare.user
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +31,7 @@ import com.example.treecare.service.api.v1.response.RiwayatPohonsPagingResponse
 import com.example.treecare.service.model.IdentitasPohonModel
 import com.example.treecare.service.model.RiwayatPohonModel
 import com.example.treecare.service.model.UserModel
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,6 +55,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     private lateinit var btnFilter: ImageView
     private lateinit var tvNoRiwayat: TextView
     private lateinit var rvHistory: RecyclerView
+    private lateinit var searchEditText: EditText
+    private lateinit var searchIcon: ImageView
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
@@ -102,6 +111,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         preferenceManager = PreferenceManager(requireContext())
         btnFilter = view.findViewById(R.id.btnFilter)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
+        searchEditText = view.findViewById(R.id.searchEditText)
+        searchIcon = view.findViewById(R.id.searchIcon)
         rvHistory = view.findViewById(R.id.rvHistory)
 
         rvHistory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -115,10 +126,35 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 val totalItemCount = layoutManager.itemCount
                 val percentageScrolled = (lastVisibleItemPosition + 1) / totalItemCount.toDouble()
 
-                if (percentageScrolled >= LOAD_MORE_THRESHOLD) {
+                if (percentageScrolled >= LOAD_MORE_THRESHOLD && page <= totalPage) {
                     loadNextPage()
                 }
             }
+        })
+        searchEditText.setOnKeyListener(View.OnKeyListener{v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+
+                this.page = 1
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+                searchEditText.clearFocus()
+                listRiwayat.clear()
+                getAllRiwayat(searchEditText.text.toString())
+
+                return@OnKeyListener true
+            }
+            false
+        })
+        searchIcon.setOnClickListener(View.OnClickListener { v ->
+            this.page = 1
+
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+            searchEditText.clearFocus()
+            listRiwayat.clear()
+            getAllRiwayat(searchEditText.text.toString())
         })
         btnFilter.setOnClickListener {
             showFilterDialog()
@@ -145,6 +181,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnAZ.setOnClickListener {
             this.sort = "nomor_pohon"
             this.sortType = "asc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -153,6 +190,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnZA.setOnClickListener {
             this.sort= "nomor_pohon"
             this.sortType = "desc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -161,6 +199,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnTerbaru.setOnClickListener {
             this.sort = "created_at"
             this.sortType = "desc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -169,6 +208,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         btnTerlama.setOnClickListener {
             this.sort = "created_at"
             this.sortType = "asc"
+            this.page = 1
 
             listRiwayat.clear()
             getAllRiwayat()
@@ -177,11 +217,13 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     }
 
     private fun loadNextPage() {
-        this.page++
-        getAllRiwayat()
+        if (this.page <= this.totalPage) {
+            this.page++
+            getAllRiwayat()
+        }
     }
 
-    private fun getAllRiwayat() {
+    private fun getAllRiwayat(keyword: String?=null) {
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -191,8 +233,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             .getApiClientAuth(okHttpClient)
             .create(RiwayatPohonService::class.java)
 
-        retroHelperRiwayatPohon.getAllRiwayat(this.sort, this.sortType, this.page, this.pageSize, authToken).enqueue(object :
-            Callback<RiwayatPohonsPagingResponse> {
+        val callback = object : Callback<RiwayatPohonsPagingResponse> {
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -204,19 +245,20 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 }
 
                 var body = response.body()
-
                 if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
                     return
                 }
 
                 // if get data
                 tvNoRiwayat.visibility = View.GONE
+                totalPage = body.data?.totalPage!!
 
                 for (riwayat in body?.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()
 
+                    newRiwayat.id = riwayat.id
                     newRiwayat.keliling = riwayat.keliling
                     newRiwayat.tinggi = riwayat.tinggi
                     newRiwayat.lebarTajuk = riwayat.lebarTajuk
@@ -262,7 +304,30 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 TODO("Not yet implemented")
             }
 
-        })
+        }
+
+        if (keyword != null) {
+            // Request with keyword
+            retroHelperRiwayatPohon.getAllRiwayatByKeyword(
+                keyword,
+                this.sort,
+                this.sortType,
+                this.page,
+                this.pageSize,
+                authToken
+            ).enqueue(callback)
+
+        } else {
+            // Request without keyword
+            retroHelperRiwayatPohon.getAllRiwayat(
+                this.sort,
+                this.sortType,
+                this.page,
+                this.pageSize,
+                authToken
+            ).enqueue(callback)
+
+        }
     }
 
     override fun onItemClick(position: Int) {

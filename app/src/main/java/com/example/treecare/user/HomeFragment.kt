@@ -1,15 +1,19 @@
 package com.example.treecare.user
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
@@ -46,6 +50,8 @@ class HomeFragment : Fragment(), PengamatanInterface {
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var rvHome: RecyclerView
     private lateinit var tvNoRiwayat: TextView
+    private lateinit var searchEditText: EditText
+    private lateinit var searchIcon: ImageView
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +93,8 @@ class HomeFragment : Fragment(), PengamatanInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val searchEditText: EditText = view.findViewById(R.id.searchEditText)
-        val searchIcon: ImageView = view.findViewById(R.id.searchIcon)
+        searchEditText = view.findViewById(R.id.searchEditText)
+        searchIcon = view.findViewById(R.id.searchIcon)
         val tvPengamatanTerbaru: TextView = view.findViewById(R.id.tvPengamatanTerbaru)
         rvHome = view.findViewById(R.id.rvHome)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
@@ -107,10 +113,25 @@ class HomeFragment : Fragment(), PengamatanInterface {
             }
         }
 
+        searchEditText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+
+                searchEditText.clearFocus()
+                listRiwayat.clear()
+                getAllRiwayat(searchEditText.text.toString())
+
+                return@OnKeyListener true
+            }
+            false
+        })
+
         getAllRiwayat()
     }
 
-    private fun getAllRiwayat() {
+    private fun getAllRiwayat(keyword: String? = null) {
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -120,7 +141,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
             .getApiClientAuth(okHttpClient)
             .create(RiwayatPohonService::class.java)
 
-        retroHelperRiwayatPohon.getAllRiwayat("created_at", "desc", 1, 5, authToken).enqueue(object : Callback<RiwayatPohonsPagingResponse> {
+        val callback = object : Callback<RiwayatPohonsPagingResponse> {
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -144,6 +165,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()
 
+                    newRiwayat.id = riwayat.id
                     newRiwayat.keliling = riwayat.keliling
                     newRiwayat.tinggi = riwayat.tinggi
                     newRiwayat.lebarTajuk = riwayat.lebarTajuk
@@ -187,10 +209,37 @@ class HomeFragment : Fragment(), PengamatanInterface {
             }
 
             override fun onFailure(call: Call<RiwayatPohonsPagingResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mendapatkan list data riwayat, " + t.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show();
             }
 
-        })
+        }
+
+        if (keyword == null) {
+
+            retroHelperRiwayatPohon.getAllRiwayat(
+                "created_at",
+                "desc",
+                1,
+                5,
+                authToken
+            ).enqueue(callback)
+
+        } else {
+
+            retroHelperRiwayatPohon.getAllRiwayatByKeyword(
+                keyword,
+                "created_at",
+                "desc",
+                1,
+                5,
+                authToken
+            ).enqueue(callback)
+
+        }
     }
 
     override fun onItemClick(position: Int) {

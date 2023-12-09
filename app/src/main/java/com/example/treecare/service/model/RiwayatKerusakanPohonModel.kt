@@ -3,7 +3,7 @@ package com.example.treecare.service.model
 data class RiwayatKerusakanPohonModel (
     var id:                 String? = null,			
     var riwayatPohonId:	    String? = null,
-    var gambarKerusakan:    String? = null,	
+    var gambarKerusakan:    List<String>? = null,
     var bagianPohon:		String? = null,
     var deksripsi:		    String? = null,
     var potensiKegagalan:	Int? = null,

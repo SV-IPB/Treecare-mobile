@@ -38,8 +38,8 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             .setText(bundle?.getString("tanggal"))
 
         btnBack.setOnClickListener {
-            val intent = Intent(this, PengamatanVisualActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, PengamatanVisualActivity::class.java)
+//            startActivity(intent)
             finish()
         }
 
@@ -48,7 +48,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
-            finish()
+//            finish()
         }
 
         btnKesehatan.setOnClickListener {
@@ -56,7 +56,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
-            finish()
+//            finish()
         }
 
         btnKerusakan.setOnClickListener {
@@ -64,7 +64,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
-            finish()
+//            finish()
         }
 
         btnKondisi.setOnClickListener {
@@ -72,7 +72,7 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
-            finish()
+//            finish()
         }
 
         btnTarget.setOnClickListener {
@@ -80,14 +80,14 @@ class RiwayatPengamatanActivity : AppCompatActivity() {
             intent.putExtra("dataRiwayat", bundle)
             intent.putExtra("idRiwayat", idRiwayat)
             startActivity(intent)
-            finish()
+//            finish()
         }
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        val intent = Intent(this, PengamatanVisualActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this, PengamatanVisualActivity::class.java)
+//        startActivity(intent)
         finish()
     }
 }
