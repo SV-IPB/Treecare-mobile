@@ -258,6 +258,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()
 
+                    newRiwayat.id = riwayat.id
                     newRiwayat.keliling = riwayat.keliling
                     newRiwayat.tinggi = riwayat.tinggi
                     newRiwayat.lebarTajuk = riwayat.lebarTajuk
