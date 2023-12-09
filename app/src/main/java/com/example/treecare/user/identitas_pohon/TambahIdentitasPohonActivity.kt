@@ -173,7 +173,6 @@ class TambahIdentitasPohonActivity : AppCompatActivity() {
 
         btnBack.setOnClickListener {
             val intent = Intent(this, PengamatanVisualActivity::class.java)
-            codeResponse = "200"
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
             startActivity(intent)
