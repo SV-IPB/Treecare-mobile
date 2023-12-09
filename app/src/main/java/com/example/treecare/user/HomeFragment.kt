@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
@@ -164,6 +165,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()
 
+                    newRiwayat.id = riwayat.id
                     newRiwayat.keliling = riwayat.keliling
                     newRiwayat.tinggi = riwayat.tinggi
                     newRiwayat.lebarTajuk = riwayat.lebarTajuk
@@ -207,7 +209,11 @@ class HomeFragment : Fragment(), PengamatanInterface {
             }
 
             override fun onFailure(call: Call<RiwayatPohonsPagingResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mendapatkan list data riwayat, " + t.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show();
             }
 
         }
