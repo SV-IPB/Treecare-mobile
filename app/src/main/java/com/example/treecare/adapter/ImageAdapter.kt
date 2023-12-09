@@ -11,11 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.interfaces.ImageInterface
 
-class ImageAdapter(
+open class ImageAdapter(
     private var context: Context,
-    private var images: ArrayList<Uri>,
     private var listener: ImageInterface
 ) : RecyclerView.Adapter<ImageAdapter.MyViewHolder>(){
+
+    private lateinit var imagesUri: ArrayList<Uri>;
+    constructor( context: Context,
+                 imagesUri: ArrayList<Uri>,
+                 listener: ImageInterface
+    ) : this(context, listener) {
+        this.imagesUri = imagesUri
+    }
 
     inner class MyViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener{
         val ivImage: ImageView = view.findViewById(R.id.ivImage)
@@ -39,10 +46,10 @@ class ImageAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageAdapter.MyViewHolder, position: Int) {
-        holder.ivImage.setImageURI(images.getOrNull(position))
+        holder.ivImage.setImageURI(imagesUri.getOrNull(position))
     }
 
     override fun getItemCount(): Int {
-        return images.count()
+        return imagesUri.count()
     }
 }
