@@ -1,11 +1,14 @@
 package com.example.treecare.user.kerusakan_pohon
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -15,17 +18,25 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.adapter.ImageAdapter
 import com.example.treecare.interfaces.ImageInterface
 import com.example.treecare.service.PreferenceManager
-import com.example.treecare.user.kesehatan_pohon.TambahKesehatanPohonActivity
 import com.example.treecare.user.kondisi_tapak.TambahKondisiTapakActivity
-import com.example.treecare.user.pengamatan_visual.PengamatanVisualActivity
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
@@ -52,12 +63,19 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
     private lateinit var nomorPohon: String
     private lateinit var codeResponse: String
 
-    val PICK_IMAGE_REQUEST = 1
+    private val PICK_IMAGE_REQUEST = 1003
+    private val CAMERA_REQUEST_CODE = 1002
     private val selectedImages = ArrayList<Uri>()
     val MAX_IMAGES = 5
     private lateinit var rvImage: RecyclerView
 
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val datetime: String
+        get() {
+            val sdf = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+            return sdf.format(Date())
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_kerusakan_pohon)
@@ -112,8 +130,7 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
         etSaranLainnya.setText(sharedPreferences.getString("saranLainnya", ""))
 
         cvFoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            showChooserDialog()
         }
 
         btnBack.setOnClickListener {
@@ -172,11 +189,86 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             val selectedImage: Uri? = data.data
             if (selectedImage != null && selectedImages.size < MAX_IMAGES) {
+                Log.e("Debug", "Photo uri: $selectedImage")
                 selectedImages.add(selectedImage)
                 updateRecyclerView()
             } else {
                 Toast.makeText(this, "Maximum gambar $MAX_IMAGES", Toast.LENGTH_SHORT).show()
             }
+        }
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            val photo: Bitmap? = data?.extras?.get("data") as? Bitmap
+
+            val photoUri: Uri? = if (photo != null) {
+                Log.e("Debug", "Photo is not null")
+                saveBitmapToFile(photo)?.let { FileProvider.getUriForFile(this, "com.example.treecare.fileprovider", it) }
+            } else {
+                Log.e("Debug", "Photo is null, data?.data: ${data?.data}")
+                data?.data
+            }
+
+            if (photoUri != null && selectedImages.size < MAX_IMAGES) {
+                selectedImages.add(photoUri)
+                updateRecyclerView()
+            } else {
+                Log.e("Debug", "Condition not met - photoUri: $photoUri, selectedImages.size: ${selectedImages.size}, MAX_IMAGES: $MAX_IMAGES")
+                Toast.makeText(this, "Maximum gambar $MAX_IMAGES", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap): File? {
+        val directory = File(filesDir, "images")
+
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        val fileDirectory = File(directory, "Treecare_${datetime}.png")
+
+        try {
+            val stream: OutputStream = FileOutputStream(fileDirectory)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e("Debug", "Error saving bitmap to file: ${e.message}")
+            return null
+        }
+
+        return fileDirectory
+    }
+
+
+
+    fun showChooserDialog(){
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_chooser)
+        val clPhoto: ConstraintLayout = dialog.findViewById(R.id.clPhoto)
+        val clGalery: ConstraintLayout = dialog.findViewById(R.id.clGalery)
+        dialog.setTitle("Chooser")
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        clPhoto.setOnClickListener {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.putExtra("idPohon",id_pohon)
+            intent.putExtra("nomor",nomorPohon)
+            intent.putExtra("responseCode",codeResponse)
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+            dialog.dismiss()
+        }
+
+        clGalery.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.putExtra("idPohon",id_pohon)
+            intent.putExtra("nomor",nomorPohon)
+            intent.putExtra("responseCode",codeResponse)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            dialog.dismiss()
         }
     }
 
