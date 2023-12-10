@@ -92,6 +92,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
             }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -125,7 +126,11 @@ class HomeFragment : Fragment(), PengamatanInterface {
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
 
                 searchEditText.clearFocus()
+                pbLoading.visibility = View.VISIBLE
+
                 listRiwayat.clear()
+                rvHome.adapter?.notifyDataSetChanged()
+
                 getAllRiwayat(searchEditText.text.toString())
 
                 return@OnKeyListener true
