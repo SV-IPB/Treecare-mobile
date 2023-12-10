@@ -182,6 +182,6 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
     }
 
     override fun onItemClick(position: Int) {
-        TODO("Not yet implemented")
+        return
     }
 }

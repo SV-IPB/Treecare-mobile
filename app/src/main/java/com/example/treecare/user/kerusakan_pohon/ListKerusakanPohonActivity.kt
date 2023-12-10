@@ -28,7 +28,7 @@ class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
 
     private lateinit var rvKerusakanPohon: RecyclerView
     private lateinit var preferenceManager : PreferenceManager
-    private val listKerusakan = ArrayList<RiwayatKerusakanPohonModel>()
+    private var listKerusakan = ArrayList<RiwayatKerusakanPohonModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_kerusakan_pohon)

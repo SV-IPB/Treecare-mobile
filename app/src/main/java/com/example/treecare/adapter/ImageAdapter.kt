@@ -27,6 +27,7 @@ open class ImageAdapter(
     inner class MyViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener{
         val ivImage: ImageView = view.findViewById(R.id.ivImage)
         val cvImage: CardView = view.findViewById(R.id.cvImage)
+        val ivXImage: ImageView = view.findViewById(R.id.ivXImage)
 
         init {
             itemView.setOnClickListener(this)
