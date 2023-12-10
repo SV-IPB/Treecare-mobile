@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
@@ -40,6 +38,7 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
     private lateinit var sPemangkasan: TextView
     private lateinit var etDeskripsiPemangkasan: TextView
     private lateinit var etSaranLainnya: TextView
+    private lateinit var pbLoading: ProgressBar
 
     private lateinit var rbYaTindakan: RadioButton
     private lateinit var rbTidakTindakan: RadioButton
@@ -68,6 +67,7 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
         sPemangkasan = findViewById(R.id.sPemangkasan)
         etDeskripsiPemangkasan = findViewById(R.id.etDeskripsiPemangkasan)
         etSaranLainnya = findViewById(R.id.etSaranLainnya)
+        pbLoading       = findViewById(R.id.pbLoading)
 
         rbYaTindakan = findViewById(R.id.rbYaTindakan)
         rbTidakTindakan = findViewById(R.id.rbTidakTindakan)
@@ -112,14 +112,17 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatKerusakanPohonResponse>, response: Response<RiwayatKerusakanPohonResponse>) {
 
+                pbLoading.visibility = View.GONE
+
                 if (!response.isSuccessful) {
                     Toast.makeText(
                         this@DetailKerusakanPohonActivity,
-                        "Gagal mendapatkan data kerusakan",
+                        "Gagal mendapatkan data",
                         Toast.LENGTH_LONG
                     ).show();
                     return
                 }
+
 
                 val body = response.body()
 
@@ -165,9 +168,10 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
             }
 
             override fun onFailure(call: Call<RiwayatKerusakanPohonResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
                 Toast.makeText(
                     this@DetailKerusakanPohonActivity,
-                    "Gagal mendapatkan data kerusakan",
+                    "Gagal mendapatkan data",
                     Toast.LENGTH_LONG
                 ).show();
             }
@@ -182,6 +186,6 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
     }
 
     override fun onItemClick(position: Int) {
-        TODO("Not yet implemented")
+        return
     }
 }

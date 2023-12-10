@@ -1,9 +1,11 @@
 package com.example.treecare
 
+import android.accounts.NetworkErrorException
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.user.MainActivity
 import com.example.treecare.service.PreferenceManager
@@ -16,7 +18,9 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -44,8 +48,14 @@ class LoginActivity : AppCompatActivity() {
                 etPassword.error = "Password wajib diisi"
                 etPassword.requestFocus()
             } else {
+                btnLogin.isEnabled = false
+                btnLogin.setBackgroundResource(R.drawable.btn_bg_grey)
+                etUsername.requestFocus()
+                etPassword.requestFocus()
+
                 logIn(etUsername.text.toString(),
                     etPassword.text.toString())
+
             }
         }
     }
@@ -71,10 +81,22 @@ class LoginActivity : AppCompatActivity() {
             .getApiClient()
             .create(UserService::class.java)
 
-        retro.login(request).enqueue(object : Callback<UserResponse> {
+        retro.login(request)
+            .enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                if (!response.isSuccessful) {
-                    Log.e("UnSuccessfull ", response.raw().toString())
+                if (response.code() == 400) {
+                    btnLogin.isEnabled = true
+                    btnLogin.setBackgroundResource(R.drawable.btn_bg)
+                    etUsername.error = "Tidak sesuai"
+                    etPassword.error = "Tidak sesuai"
+                    etUsername.requestFocus()
+
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Username dan Password tidak sesuai",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     return
                 }
 
@@ -97,10 +119,19 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Log.e("Error ", t.message ?: "Error Login")
+                btnLogin.isEnabled = true
+                btnLogin.setBackgroundResource(R.drawable.btn_bg)
+                etUsername.requestFocus()
+
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Periksa koneksi internet anda",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
+
     }
 
 }

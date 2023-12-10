@@ -2,6 +2,7 @@ package com.example.treecare.adapter
 
 import android.content.Context
 import android.net.Uri
+import android.view.View
 import com.example.treecare.interfaces.ImageInterface
 import com.squareup.picasso.Picasso
 
@@ -22,6 +23,8 @@ class ImageAdapterKerusakanPohon(
 //        super.onBindViewHolder(holder, position)
         Picasso.get().invalidate(imagesString[position])
         Picasso.get().load(imagesString[position]).into(holder.ivImage)
+
+        holder.ivXImage.visibility = View.GONE
     }
 
     override fun getItemCount(): Int {

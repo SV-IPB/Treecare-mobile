@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.example.treecare.R
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
@@ -27,6 +25,7 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
     private lateinit var rbTidakGangguan: RadioButton
     private lateinit var sMasalahTanah: TextView
     private lateinit var sGangguanLainnya: TextView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager : PreferenceManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +37,7 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
         rbTidakGangguan = findViewById(R.id.rbTidakGangguan)
         sMasalahTanah = findViewById(R.id.sMasalahTanah)
         sGangguanLainnya = findViewById(R.id.sGangguanLainnya)
+        pbLoading       = findViewById(R.id.pbLoading)
 
         preferenceManager = PreferenceManager(this)
 
@@ -63,6 +63,7 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
 
         retro.getRiwayatDetailPohonById(idRiwayat, authToken).enqueue(object : Callback<RiwayatPohonResponse> {
             override fun onResponse(call: Call<RiwayatPohonResponse>, response: Response<RiwayatPohonResponse>) {
+                pbLoading.visibility = View.GONE
 
                 if (!response.isSuccessful) {
                     Toast.makeText(this@DetailKondisiTapakActivity, "Gagal mengambil data",
@@ -86,6 +87,7 @@ class DetailKondisiTapakActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RiwayatPohonResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
                 Toast.makeText(this@DetailKondisiTapakActivity, "Gagal mengambil data",
                     Toast.LENGTH_LONG).show();
             }

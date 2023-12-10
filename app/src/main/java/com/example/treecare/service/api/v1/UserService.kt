@@ -14,9 +14,6 @@ interface UserService {
         @Body loginRequest: LoginRequest
     ): Call<UserResponse>
 
-    @POST("auth/logout")
-    fun logout(): Call<UserResponse>
-
     @POST("auth/refresh-token")
     fun refreshToken(
         @Header("Authorization") refreshToken: String?
@@ -27,7 +24,7 @@ interface UserService {
         @Header("Authorization") authToken: String?
     ): Call<UserResponse>
 
-    @GET("auth/logout")
+    @POST("auth/logout")
     fun  logOut(
         @Header("Authorization") authToken: String?
     ): Call<UserResponse>

@@ -5,9 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.R
 import com.example.treecare.service.PreferenceManager
@@ -37,6 +40,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
     private lateinit var sPemilik: TextView
     private lateinit var etJenisPohon: TextView
     private lateinit var sNilaiSpesial: TextView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var nomor: String
     private lateinit var codeResponse: String
@@ -58,6 +62,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
         sPemilik = findViewById(R.id.sPemilik)
         etJenisPohon = findViewById(R.id.etJenisPohon)
         sNilaiSpesial = findViewById(R.id.sNilaiSpesial)
+        pbLoading = findViewById(R.id.pbLoading)
 
         getByNomorPohon()
 
@@ -104,13 +109,25 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
         val okHttpClient = OkHttpClient.Builder()
             .authenticator(tokenAuthenticator)
             .build()
-        val Retro = RetrofitHelperV1().getApiClientAuth(okHttpClient).create(PohonService::class.java)
+        val Retro = RetrofitHelperV1()
+            .getApiClientAuth(okHttpClient)
+            .create(PohonService::class.java)
+
         Retro.getByNomorPohon(nomorPohon,token).enqueue(object : Callback<IdentitasPohonResponse> {
+            @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<IdentitasPohonResponse>, response: Response<IdentitasPohonResponse>) {
-                val gson = GsonBuilder().setPrettyPrinting().create()
-                val responseBody = gson.toJson(response.body())
-                val responseCode = response.code()
-                Log.e("Body: ", responseBody)
+                pbLoading.visibility = View.GONE
+
+                if (!response.isSuccessful) {
+                    Toast.makeText(
+                        this@DetailIndentitasPohonActivity,
+                        "Gagal mengambil data",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return
+                }
+
 
                 val latitude = response.body()?.data?.latitude
                 val longitude = response.body()?.data?.longitude
@@ -118,6 +135,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
                 val imgUri = response.body()?.data?.gambar
                 Picasso.get().invalidate(imgUri)
                 Picasso.get().load(imgUri).into(ivFoto)
+
                 id_pohon = response.body()?.data?.id.toString()
                 etNomorPohon.text = response.body()?.data?.nomorPohon
                 etAlamat.text = response.body()?.data?.alamat
@@ -127,11 +145,14 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
                 etJenisPohon.text =  response.body()?.data?.jenisPohon
                 sNilaiSpesial.text = response.body()?.data?.nilaiSpesial
 
-
             }
             override fun onFailure(call: Call<IdentitasPohonResponse>, t: Throwable) {
-                Log.e("Network API Error: ", t.message.toString())
-                Log.e("Error: ","network or API call failure")
+                pbLoading.visibility = View.GONE
+                Toast.makeText(
+                    this@DetailIndentitasPohonActivity,
+                    "Gagal mengambil data",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
