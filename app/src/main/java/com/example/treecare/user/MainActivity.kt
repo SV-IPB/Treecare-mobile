@@ -1,10 +1,12 @@
 package com.example.treecare.user
 
+import android.accounts.NetworkErrorException
 import android.app.Dialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.http.NetworkException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -42,7 +44,9 @@ import okhttp3.OkHttpClient
 import org.osmdroid.config.Configuration
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -166,14 +170,25 @@ class MainActivity : AppCompatActivity() {
                 .getApiClientAuth(okHttpClient)
                 .create(UserService::class.java)
 
-            retro.logOut(authToken).enqueue(object : Callback<UserResponse> {
+            retro.logOut(authToken)
+                .enqueue(object : Callback<UserResponse> {
                 override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
 
-                    if (!response.isSuccessful) {
-                        return
-                    }
+//                    Toast.makeText(
+//                        this@MainActivity,
+//                        "${response.message()} ${response.code()}",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//
+//                    if (!response.isSuccessful) {
+//                        return
+//                    }
 
-                    Log.e("Success Request ", "Logout Success")
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Success Logout",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                     preferenceManager.removeData()
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
@@ -182,13 +197,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                    Log.e("Failure Request ", "Failed Logout")
+                    Toast.makeText(this@MainActivity, t.message.toString(), Toast.LENGTH_SHORT).show()
                 }
             })
         }
     }
 
-    fun checkUser() {
+    private fun checkUser() {
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -202,14 +217,21 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
 
                 if (!response.isSuccessful || response.code() >= 400) {
-                    Log.e("unSuccessful at MainActivity.kt", response.message().toString())
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Sesi habis",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                    retro.logOut(authToken).execute()
                     preferenceManager.removeData()
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
-                    return
+
+                    try {
+                        retro.logOut(authToken).execute()
+                    } catch (_: Exception) {}
+
                 }
             }
 
