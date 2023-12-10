@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/btnAZ"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="A-Z"
         android:fontFamily="@font/poppins_regular"
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/btnZA"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Z-A"
         android:fontFamily="@font/poppins_regular"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/btnTerbaru"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Terbaru"
         android:fontFamily="@font/poppins_regular"
@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/btnTerlama"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Terlama"
         android:fontFamily="@font/poppins_regular"

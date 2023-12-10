@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.user.MainActivity
@@ -40,6 +41,24 @@ class LoginActivity : AppCompatActivity() {
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
 
+        etUsername.hint = "Masukan Username"
+        etUsername.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                etUsername.hint = ""
+            } else {
+                etUsername.hint = "Masukan Username"
+            }
+        })
+
+        etPassword.hint = "Masukan Password"
+        etPassword.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                etPassword.hint = ""
+            } else {
+                etPassword.hint = "Masukan Password"
+            }
+        })
+
         btnLogin.setOnClickListener {
             if (etUsername.text.toString() == ""){
                 etUsername.error = "Username wajib diisi"
@@ -50,8 +69,14 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 btnLogin.isEnabled = false
                 btnLogin.setBackgroundResource(R.drawable.btn_bg_grey)
-                etUsername.requestFocus()
-                etPassword.requestFocus()
+
+                if (etUsername.hasFocus()) {
+                    etUsername.requestFocus()
+                }
+
+                if (etPassword.hasFocus()) {
+                    etPassword.requestFocus()
+                }
 
                 logIn(etUsername.text.toString(),
                     etPassword.text.toString())

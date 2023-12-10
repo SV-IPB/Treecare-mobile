@@ -66,6 +66,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
     private val LOAD_MORE_THRESHOLD = 1
 
+    private var currFilter: Int? = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +105,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -139,7 +142,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
 
                 searchEditText.clearFocus()
+                pbLoading.visibility = View.VISIBLE
+
                 listRiwayat.clear()
+                rvHistory.adapter?.notifyDataSetChanged()
+
                 getAllRiwayat(searchEditText.text.toString())
 
                 return@OnKeyListener true
@@ -153,7 +160,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
 
             searchEditText.clearFocus()
+            pbLoading.visibility = View.VISIBLE
+
             listRiwayat.clear()
+            rvHistory.adapter?.notifyDataSetChanged()
+
             getAllRiwayat(searchEditText.text.toString())
         })
         btnFilter.setOnClickListener {
@@ -179,7 +190,23 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         val btnTerbaru:TextView = filterLogout.findViewById(R.id.btnTerbaru)
         val btnTerlama:TextView = filterLogout.findViewById(R.id.btnTerlama)
 
+        when (currFilter) {
+            1 -> {
+                btnAZ.setTypeface(resources.getFont(R.font.poppins_bold))
+            }
+            2 -> {
+                btnZA.setTypeface(resources.getFont(R.font.poppins_bold))
+            }
+            3 -> {
+                btnTerbaru.setTypeface(resources.getFont(R.font.poppins_bold))
+            }
+            4 -> {
+                btnTerlama.setTypeface(resources.getFont(R.font.poppins_bold))
+            }
+        }
+
         btnAZ.setOnClickListener {
+            currFilter = 1
             this.sort = "nomor_pohon"
             this.sortType = "asc"
             this.page = 1
@@ -193,6 +220,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             filterLogout.dismiss()
         }
         btnZA.setOnClickListener {
+            currFilter = 2
             this.sort= "nomor_pohon"
             this.sortType = "desc"
             this.page = 1
@@ -206,6 +234,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             filterLogout.dismiss()
         }
         btnTerbaru.setOnClickListener {
+            currFilter = 3
             this.sort = "created_at"
             this.sortType = "desc"
             this.page = 1
@@ -219,6 +248,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             filterLogout.dismiss()
         }
         btnTerlama.setOnClickListener {
+            currFilter = 4
             this.sort = "created_at"
             this.sortType = "asc"
             this.page = 1
