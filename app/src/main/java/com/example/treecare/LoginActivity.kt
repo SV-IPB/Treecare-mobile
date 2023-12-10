@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.user.MainActivity
@@ -39,6 +40,22 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
+
+        etUsername.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                etUsername.hint = ""
+            } else {
+                etUsername.hint = "Masukan Username"
+            }
+        })
+
+        etPassword.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                etPassword.hint = ""
+            } else {
+                etPassword.hint = "Masukan Password"
+            }
+        })
 
         btnLogin.setOnClickListener {
             if (etUsername.text.toString() == ""){
