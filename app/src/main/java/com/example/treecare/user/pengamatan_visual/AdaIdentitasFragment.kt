@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +54,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
     private var idPohon: String? = null
     private lateinit var rvPengamatan: RecyclerView
     private lateinit var tvNoRiwayat: TextView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
@@ -101,6 +104,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         val clIdentitas: ConstraintLayout = view.findViewById(R.id.clIdentitas)
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
+        pbLoading   = view.findViewById(R.id.pbLoading)
 
         preferenceManager = PreferenceManager(requireContext())
         rvPengamatan = view.findViewById(R.id.rvPengamatan)
@@ -110,6 +114,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             LinearLayoutManager.VERTICAL,
             false)
         rvPengamatan.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
+        tvNoRiwayat.visibility = View.GONE
 
         // Request get data riwayat
         getAllRiwayat()
@@ -145,18 +150,23 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         retroHelperRiwayatPohonService.getAllRiwayatPohonById(idPohon, authToken).enqueue(object : Callback<RiwayatPohonsResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatPohonsResponse>, response: Response<RiwayatPohonsResponse>) {
+                pbLoading.visibility = View.GONE
 
-                Log.e("Raw Response riwayat: ", response.raw().toString())
-                val gson = GsonBuilder().setPrettyPrinting().create()
-                val responseBody = gson.toJson(response.body())
+                if (!response.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Gagal mengambil data",
+                        Toast.LENGTH_LONG
+                    ).show();
+
+                    return
+                }
 
                 var body = response.body()
 
                 if (body?.data == null || body.data?.size == 0 ) {
                     return
                 }
-
-                tvNoRiwayat.visibility = View.GONE
 
                 for (riwayat in body.data!!) {
                     var newRiwayat = RiwayatPohonModel()
@@ -207,7 +217,13 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             }
 
             override fun onFailure(call: Call<RiwayatPohonsResponse>, t: Throwable) {
-                Log.e("Failure Request ", "Failed to request getAllRiwayat ")
+                pbLoading.visibility = View.GONE
+                tvNoRiwayat.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mengambil data",
+                    Toast.LENGTH_LONG
+                ).show();
             }
         })
     }

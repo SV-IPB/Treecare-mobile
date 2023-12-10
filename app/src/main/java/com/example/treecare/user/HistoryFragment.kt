@@ -12,10 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +54,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     private lateinit var rvHistory: RecyclerView
     private lateinit var searchEditText: EditText
     private lateinit var searchIcon: ImageView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
@@ -114,10 +112,12 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         searchEditText = view.findViewById(R.id.searchEditText)
         searchIcon = view.findViewById(R.id.searchIcon)
         rvHistory = view.findViewById(R.id.rvHistory)
+        pbLoading = view.findViewById(R.id.pbLoading)
 
         rvHistory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         rvHistory.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
 
+        tvNoRiwayat.visibility = View.GONE
         rvHistory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -163,6 +163,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
         getAllRiwayat()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun showFilterDialog() {
         val filterLogout = Dialog(requireActivity(), R.style.MaterialDialogSheet)
         filterLogout.setContentView(R.layout.dialog_filter)
@@ -184,6 +185,10 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             this.page = 1
 
             listRiwayat.clear()
+            rvHistory.adapter?.notifyDataSetChanged()
+
+            pbLoading.visibility = View.VISIBLE
+
             getAllRiwayat()
             filterLogout.dismiss()
         }
@@ -193,6 +198,10 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             this.page = 1
 
             listRiwayat.clear()
+            rvHistory.adapter?.notifyDataSetChanged()
+
+            pbLoading.visibility = View.VISIBLE
+
             getAllRiwayat()
             filterLogout.dismiss()
         }
@@ -202,6 +211,10 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             this.page = 1
 
             listRiwayat.clear()
+            rvHistory.adapter?.notifyDataSetChanged()
+
+            pbLoading.visibility = View.VISIBLE
+
             getAllRiwayat()
             filterLogout.dismiss()
         }
@@ -211,6 +224,10 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             this.page = 1
 
             listRiwayat.clear()
+            rvHistory.adapter?.notifyDataSetChanged()
+
+            pbLoading.visibility = View.VISIBLE
+
             getAllRiwayat()
             filterLogout.dismiss()
         }
@@ -240,6 +257,9 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 call: Call<RiwayatPohonsPagingResponse>,
                 response: Response<RiwayatPohonsPagingResponse>
             ) {
+
+                pbLoading.visibility = View.GONE
+
                 if (!response.isSuccessful) {
                     return
                 }
@@ -250,7 +270,6 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 }
 
                 // if get data
-                tvNoRiwayat.visibility = View.GONE
                 totalPage = body.data?.totalPage!!
 
                 for (riwayat in body?.data?.data!!) {
@@ -301,7 +320,13 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 rvHistory.adapter?.notifyDataSetChanged()
             }
             override fun onFailure(call: Call<RiwayatPohonsPagingResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                pbLoading.visibility = View.GONE
+                tvNoRiwayat.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mendapatkan data pengamatan",
+                    Toast.LENGTH_LONG
+                ).show();
             }
 
         }

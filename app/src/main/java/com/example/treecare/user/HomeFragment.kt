@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +53,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
     private lateinit var tvNoRiwayat: TextView
     private lateinit var searchEditText: EditText
     private lateinit var searchIcon: ImageView
+    private lateinit var pbLoading: ProgressBar
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,10 +100,13 @@ class HomeFragment : Fragment(), PengamatanInterface {
         val tvPengamatanTerbaru: TextView = view.findViewById(R.id.tvPengamatanTerbaru)
         rvHome = view.findViewById(R.id.rvHome)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
+        pbLoading = view.findViewById(R.id.pbLoading)
         preferenceManager = PreferenceManager(requireContext())
 
         rvHome.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         rvHome.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
+
+        tvNoRiwayat.visibility = View.GONE
 
         searchIcon.setOnClickListener {
             if (searchEditText.visibility == View.VISIBLE) {
@@ -148,6 +153,9 @@ class HomeFragment : Fragment(), PengamatanInterface {
                 call: Call<RiwayatPohonsPagingResponse>,
                 response: Response<RiwayatPohonsPagingResponse>
             ) {
+
+                pbLoading.visibility = View.GONE
+
                 if (!response.isSuccessful) {
                     return
                 }
@@ -158,7 +166,6 @@ class HomeFragment : Fragment(), PengamatanInterface {
                     return
                 }
 
-                tvNoRiwayat.visibility = View.GONE
 
                 for (riwayat in body.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
@@ -209,9 +216,11 @@ class HomeFragment : Fragment(), PengamatanInterface {
             }
 
             override fun onFailure(call: Call<RiwayatPohonsPagingResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
+                tvNoRiwayat.visibility = View.VISIBLE
                 Toast.makeText(
                     requireContext(),
-                    "Gagal mendapatkan list data riwayat, " + t.message.toString(),
+                    "Gagal mendapatkan data pengamatan",
                     Toast.LENGTH_LONG
                 ).show();
             }

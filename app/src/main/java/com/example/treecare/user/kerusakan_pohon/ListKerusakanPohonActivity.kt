@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +29,7 @@ import retrofit2.Response
 class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
 
     private lateinit var rvKerusakanPohon: RecyclerView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager : PreferenceManager
     private var listKerusakan = ArrayList<RiwayatKerusakanPohonModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +38,7 @@ class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
 
         val btnBack: ImageView = findViewById(R.id.btnBack)
         rvKerusakanPohon = findViewById(R.id.rvKerusakanPohon)
+        pbLoading       = findViewById(R.id.pbLoading)
         preferenceManager = PreferenceManager(this)
 
         rvKerusakanPohon.layoutManager = LinearLayoutManager(
@@ -72,6 +76,8 @@ class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<RiwayatPohonResponse>, response: Response<RiwayatPohonResponse>) {
 
+                pbLoading.visibility = View.GONE
+
                 if (!response.isSuccessful) {
                     Toast.makeText(
                         this@ListKerusakanPohonActivity,
@@ -80,6 +86,7 @@ class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
                     ).show();
                     return
                 }
+
 
                 val body = response.body()
                 for (kerusakan in body?.data?.riwayatKerusakanPohon!!) {
@@ -93,6 +100,7 @@ class ListKerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
             }
 
             override fun onFailure(call: Call<RiwayatPohonResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
                 Toast.makeText(
                     this@ListKerusakanPohonActivity,
                     "Gagal mendapatkan data kerusakan",

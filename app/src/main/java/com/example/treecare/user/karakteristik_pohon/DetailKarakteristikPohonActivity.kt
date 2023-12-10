@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.treecare.R
@@ -26,6 +28,7 @@ class DetailKarakteristikPohonActivity : AppCompatActivity() {
     private lateinit var sBentuk:    TextView
     private lateinit var etCrownRatio: TextView
     private lateinit var sSejarahPemangkasan: TextView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager : PreferenceManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,7 @@ class DetailKarakteristikPohonActivity : AppCompatActivity() {
         etLebarTajuk    = findViewById(R.id.etLebarTajuk)
         sBentuk         = findViewById(R.id.sBentuk)
         etCrownRatio    = findViewById(R.id.etCrownRatio)
+        pbLoading       = findViewById(R.id.pbLoading)
         sSejarahPemangkasan = findViewById(R.id.sSejarahPemangkasan)
         preferenceManager = PreferenceManager(this)
 
@@ -63,14 +67,15 @@ class DetailKarakteristikPohonActivity : AppCompatActivity() {
         retro.getRiwayatDetailPohonById(idRiwayat, authToken).enqueue(object : Callback<RiwayatPohonResponse> {
             override fun onResponse(call: Call<RiwayatPohonResponse>, response: Response<RiwayatPohonResponse>) {
 
+                pbLoading.visibility = View.GONE
                 if (!response.isSuccessful) {
                     Toast.makeText(this@DetailKarakteristikPohonActivity, "Gagal mengambil data",
                         Toast.LENGTH_LONG).show();
                     return
                 }
 
-                val body = response.body()
 
+                val body = response.body()
                 etKeliling.setText(body?.data?.keliling.toString())
                 etTinggi.setText(body?.data?.tinggi.toString())
                 etLebarTajuk.setText(body?.data?.lebarTajuk.toString())
@@ -81,6 +86,7 @@ class DetailKarakteristikPohonActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RiwayatPohonResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
                 Toast.makeText(this@DetailKarakteristikPohonActivity, "Gagal mengambil data",
                     Toast.LENGTH_LONG).show();
             }

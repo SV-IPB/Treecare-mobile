@@ -236,7 +236,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Log.e("Failure request ", "")
+                Toast.makeText(
+                    this@MainActivity,
+                    "Terjadi kesalahan, Periksa jaringan anda",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })

@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.example.treecare.R
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
@@ -28,6 +26,7 @@ class DetailTargetActivity : AppCompatActivity() {
     private lateinit var rbYaDibatasi: RadioButton
     private lateinit var rbTidakDibatasi: RadioButton
     private lateinit var sHunian: TextView
+    private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager : PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +40,7 @@ class DetailTargetActivity : AppCompatActivity() {
         rbYaDibatasi = findViewById(R.id.rbYaDibatasi)
         rbTidakDibatasi = findViewById(R.id.rbTidakDibatasi)
         sHunian = findViewById(R.id.sHunian)
+        pbLoading   = findViewById(R.id.pbLoading)
 
         preferenceManager = PreferenceManager(this)
 
@@ -67,6 +67,7 @@ class DetailTargetActivity : AppCompatActivity() {
 
         retro.getRiwayatDetailPohonById(idRiwayat, authToken).enqueue(object : Callback<RiwayatPohonResponse> {
             override fun onResponse(call: Call<RiwayatPohonResponse>, response: Response<RiwayatPohonResponse>) {
+                pbLoading.visibility = View.GONE
 
                 if (!response.isSuccessful) {
                     Toast.makeText(this@DetailTargetActivity, "Gagal mengambil data",
@@ -97,6 +98,7 @@ class DetailTargetActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RiwayatPohonResponse>, t: Throwable) {
+                pbLoading.visibility = View.GONE
                 Toast.makeText(this@DetailTargetActivity, "Gagal mengambil data",
                     Toast.LENGTH_LONG).show();
             }
