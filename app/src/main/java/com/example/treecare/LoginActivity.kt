@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
 
+        etUsername.hint = "Masukan Username"
         etUsername.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 etUsername.hint = ""
@@ -49,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        etPassword.hint = "Masukan Password"
         etPassword.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 etPassword.hint = ""
@@ -67,8 +69,14 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 btnLogin.isEnabled = false
                 btnLogin.setBackgroundResource(R.drawable.btn_bg_grey)
-                etUsername.requestFocus()
-                etPassword.requestFocus()
+
+                if (etUsername.hasFocus()) {
+                    etUsername.requestFocus()
+                }
+
+                if (etPassword.hasFocus()) {
+                    etPassword.requestFocus()
+                }
 
                 logIn(etUsername.text.toString(),
                     etPassword.text.toString())
