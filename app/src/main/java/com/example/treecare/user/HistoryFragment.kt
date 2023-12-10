@@ -138,6 +138,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
 
                 this.page = 1
+                currFilter = 0
+
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
 
@@ -154,7 +156,9 @@ class HistoryFragment : Fragment(), PengamatanInterface {
             false
         })
         searchIcon.setOnClickListener(View.OnClickListener { v ->
+
             this.page = 1
+            currFilter = 0
 
             val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -216,7 +220,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
             pbLoading.visibility = View.VISIBLE
 
-            getAllRiwayat()
+            if (searchEditText.text.toString() != "") {
+                getAllRiwayat(searchEditText.text.toString())
+            } else {
+                getAllRiwayat()
+            }
             filterLogout.dismiss()
         }
         btnZA.setOnClickListener {
@@ -230,7 +238,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
             pbLoading.visibility = View.VISIBLE
 
-            getAllRiwayat()
+            if (searchEditText.text.toString() != "") {
+                getAllRiwayat(searchEditText.text.toString())
+            } else {
+                getAllRiwayat()
+            }
             filterLogout.dismiss()
         }
         btnTerbaru.setOnClickListener {
@@ -244,7 +256,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
             pbLoading.visibility = View.VISIBLE
 
-            getAllRiwayat()
+            if (searchEditText.text.toString() != "") {
+                getAllRiwayat(searchEditText.text.toString())
+            } else {
+                getAllRiwayat()
+            }
             filterLogout.dismiss()
         }
         btnTerlama.setOnClickListener {
@@ -258,7 +274,11 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
             pbLoading.visibility = View.VISIBLE
 
-            getAllRiwayat()
+            if (searchEditText.text.toString() != "") {
+                getAllRiwayat(searchEditText.text.toString())
+            } else {
+                getAllRiwayat()
+            }
             filterLogout.dismiss()
         }
     }
@@ -271,6 +291,8 @@ class HistoryFragment : Fragment(), PengamatanInterface {
     }
 
     private fun getAllRiwayat(keyword: String?=null) {
+        tvNoRiwayat.visibility = View.GONE
+
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -295,11 +317,17 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                 }
 
                 var body = response.body()
-                if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
+                if (body?.data == null ) {
                     return
                 }
+                if (body.data?.data == null || body.data?.data?.size == 0) {
+                    tvNoRiwayat.visibility = View.VISIBLE
 
-                // if get data
+                    return
+                } else {
+                    tvNoRiwayat.visibility = View.GONE
+                }
+
                 totalPage = body.data?.totalPage!!
 
                 for (riwayat in body?.data?.data!!) {

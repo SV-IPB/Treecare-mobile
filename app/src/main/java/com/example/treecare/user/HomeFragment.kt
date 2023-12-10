@@ -142,6 +142,8 @@ class HomeFragment : Fragment(), PengamatanInterface {
     }
 
     private fun getAllRiwayat(keyword: String? = null) {
+        tvNoRiwayat.visibility = View.GONE
+
         val authToken = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -167,10 +169,17 @@ class HomeFragment : Fragment(), PengamatanInterface {
 
                 var body = response.body()
 
-                if (body?.data == null || body.data?.data == null || body.data?.data?.size == 0) {
+                if (body?.data == null) {
                     return
                 }
 
+                if (body.data?.data == null || body.data?.data?.size == 0) {
+                    tvNoRiwayat.visibility = View.VISIBLE
+
+                    return
+                } else {
+                    tvNoRiwayat.visibility = View.GONE
+                }
 
                 for (riwayat in body.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
