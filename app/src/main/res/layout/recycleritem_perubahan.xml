@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Data pemiliki, jenis pohon telah diubah oleh Nadira Belinda"
-        android:fontFamily="@font/poppins_bold"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

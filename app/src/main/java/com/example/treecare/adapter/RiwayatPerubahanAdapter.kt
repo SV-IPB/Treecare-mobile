@@ -2,6 +2,10 @@ package com.example.treecare.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.interfaces.PerubahanInterface
 import com.example.treecare.service.model.RiwayatPerubahanModel
+
 
 class RiwayatPerubahanAdapter(
     private var context: Context,
@@ -41,7 +46,28 @@ class RiwayatPerubahanAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.tvPerubahan.text = "Data ${listPerubahan.get(position).fieldName} telah diubah oleh ${listPerubahan.get(position).user?.nama}"
+
+        var text = "Data ${listPerubahan.get(position).fieldName} telah diubah oleh ${listPerubahan.get(position).user?.nama}"
+        val spannableString = SpannableString(text)
+        val startIndexListField = text.indexOf(listPerubahan.get(position).fieldName!!)
+        val endIndexListField = startIndexListField + listPerubahan.get(position).fieldName!!.length
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            startIndexListField,
+            endIndexListField,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        val startIndexUser = text.indexOf(listPerubahan.get(position).user?.nama!!)
+        val endIndexUser = startIndexUser + listPerubahan.get(position).user?.nama!!.length
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            startIndexUser,
+            endIndexUser,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        holder.tvPerubahan.text = spannableString
         holder.tvTanggal.text = listPerubahan.get(position).tanggal
         holder.tvJam.text = listPerubahan.get(position).jam
     }

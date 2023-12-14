@@ -20,6 +20,7 @@ import com.example.treecare.service.api.v1.RetrofitHelperV1
 import com.example.treecare.service.api.v1.TokenAuthenticator
 import com.example.treecare.service.api.v1.response.RiwayatPerubahanResponse
 import com.example.treecare.service.model.RiwayatPerubahanModel
+import com.example.treecare.service.model.UserModel
 import com.example.treecare.user.identitas_pohon.DetailIndentitasPohonActivity
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -47,7 +48,7 @@ class RiwayatPerubahanActivity : AppCompatActivity(), PerubahanInterface {
 
         nomor = intent.getStringExtra("nomor").toString()
         codeResponse = intent.getStringExtra("responseCode").toString()
-        idPohon = intent.getStringExtra("idPohon").toString()
+        idPohon = intent.getStringExtra("id").toString()
 
         val btnBack: ImageView = findViewById(R.id.btnBack)
         rvPerubahan.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -110,7 +111,10 @@ class RiwayatPerubahanActivity : AppCompatActivity(), PerubahanInterface {
                     newPerubahan.tanggal = perubahan.tanggal
                     newPerubahan.jam = perubahan.jam
 
-                    newPerubahan.user?.nama = perubahan.user?.name
+                    val user = UserModel()
+                    user.nama = perubahan.user?.name
+
+                    newPerubahan.user = user
 
                     listPerubahan.add(newPerubahan)
                 }
