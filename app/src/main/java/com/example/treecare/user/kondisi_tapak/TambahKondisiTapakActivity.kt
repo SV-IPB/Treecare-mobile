@@ -68,10 +68,7 @@ class TambahKondisiTapakActivity : AppCompatActivity() {
         sGangguanLainnya = findViewById(R.id.sGangguanLainnya)
         etGangguanLainnya = findViewById(R.id.etGangguanLainnya)
 
-        sKarakteristikTapak.setSelection(sharedPreferences.getInt("karakteristikTapak", 0))
-        rgGangguan.check(sharedPreferences.getInt("gangguan", R.id.rbTidakGangguan))
-        sMasalahTanah.setSelection(sharedPreferences.getInt("masalahTanah", 0))
-        sGangguanLainnya.setSelection(sharedPreferences.getInt("gangguanLainnya", 0))
+        loadValuesFromSharedPreferences()
 
         sKarakteristikTapak.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -144,14 +141,33 @@ class TambahKondisiTapakActivity : AppCompatActivity() {
 
     private fun saveValuesToSharedPreferences() {
         val editor = sharedPreferences.edit()
-        editor.putInt("karakteristikTapak", sKarakteristikTapak.selectedItemPosition)
+        editor.putInt("gangguan", if (rgGangguan.checkedRadioButtonId != -1) rgGangguan.checkedRadioButtonId else -1)
+        editor.putString("karakteristikTapak", sKarakteristikTapak.selectedItem.toString())
         editor.putString("karakteristikLainnya", etKarakteristikLainnya.text.toString())
-        editor.putInt("gangguan", rgGangguan.checkedRadioButtonId)
-        editor.putInt("masalahTanah", sMasalahTanah.selectedItemPosition)
+        editor.putString("masalahTanah", sMasalahTanah.selectedItem.toString())
         editor.putString("masalahTanahLainnya", etMasalahTanahLainnya.text.toString())
-        editor.putInt("gangguanLainnya", sGangguanLainnya.selectedItemPosition)
+        editor.putString("gangguanLainnya", sGangguanLainnya.selectedItem.toString())
         editor.putString("gangguanLainnyaText", etGangguanLainnya.text.toString())
         editor.apply()
+    }
+
+    private fun loadValuesFromSharedPreferences() {
+        val gangguanCheckedId = sharedPreferences.getInt("gangguan", -1)
+        if (gangguanCheckedId != -1) {
+            rgGangguan.check(gangguanCheckedId)
+        }
+
+        val karakteristikTapakValue = sharedPreferences.getString("karakteristikTapak", "")
+        val karakteristikTapakPosition = resources.getStringArray(R.array.KarakteristikTapak).indexOf(karakteristikTapakValue)
+        sKarakteristikTapak.setSelection(if (karakteristikTapakPosition != -1) karakteristikTapakPosition else 0)
+
+        val masalahTanahValue = sharedPreferences.getString("masalahTanah", "")
+        val masalahTanahPosition = resources.getStringArray(R.array.MasalahTanah).indexOf(masalahTanahValue)
+        sMasalahTanah.setSelection(if (masalahTanahPosition != -1) masalahTanahPosition else 0)
+
+        val gangguanLainnyaValue = sharedPreferences.getString("gangguanLainnya", "")
+        val gangguanLainnyaPosition = resources.getStringArray(R.array.GangguanLainnya).indexOf(gangguanLainnyaValue)
+        sGangguanLainnya.setSelection(if (gangguanLainnyaPosition != -1) gangguanLainnyaPosition else 0)
     }
 
     @SuppressLint("MissingSuperCall")

@@ -72,14 +72,7 @@ class TambahKesehatanPohonActivity : AppCompatActivity() {
         Log.e("nomor pohon : ", nomorPohon)
         Log.e("code pohon : ", codeResponse)
 
-        sWarnaDaun.setSelection(sharedPreferences.getInt("warnaDaun", 0))
-        rgEpicormic.check(sharedPreferences.getInt("epicormic", R.id.rbTidakEpicormic))
-        sKerapatanDaun.setSelection(sharedPreferences.getInt("kerapatanDaun", 0))
-        rgUkuranDaun.check(sharedPreferences.getInt("ukuranDaun", R.id.rbNormal))
-        sWoundWood.setSelection(sharedPreferences.getInt("woundWood", 0))
-        rgTwig.check(sharedPreferences.getInt("twig", R.id.rbTidakTwig))
-        sVigor.setSelection(sharedPreferences.getInt("vigor", 0))
-        etHama.setText(sharedPreferences.getString("hama", ""))
+        loadValuesFromSharedPreferences()
 
         val btnBack: ImageView = findViewById(R.id.btnBack)
         val btnSelanjutnya: AppCompatButton = findViewById(R.id.btnSelanjutnya)
@@ -107,15 +100,50 @@ class TambahKesehatanPohonActivity : AppCompatActivity() {
 
     private fun saveValuesToSharedPreferences() {
         val editor = sharedPreferences.edit()
-        editor.putInt("warnaDaun", sWarnaDaun.selectedItemPosition)
-        editor.putInt("epicormic", rgEpicormic.checkedRadioButtonId)
-        editor.putInt("kerapatanDaun", sKerapatanDaun.selectedItemPosition)
-        editor.putInt("ukuranDaun", rgUkuranDaun.checkedRadioButtonId)
-        editor.putInt("woundWood", sWoundWood.selectedItemPosition)
-        editor.putInt("twig", rgTwig.checkedRadioButtonId)
-        editor.putInt("vigor", sVigor.selectedItemPosition)
+        editor.putInt("epicormic", if (rgEpicormic.checkedRadioButtonId != -1) rgEpicormic.checkedRadioButtonId else -1)
+        editor.putInt("ukuranDaun", if (rgUkuranDaun.checkedRadioButtonId != -1) rgUkuranDaun.checkedRadioButtonId else -1)
+        editor.putInt("twig", if (rgTwig.checkedRadioButtonId != -1) rgTwig.checkedRadioButtonId else -1)
+        editor.putString("warnaDaun", sWarnaDaun.selectedItem.toString())
+        editor.putString("kerapatanDaun", sKerapatanDaun.selectedItem.toString())
+        editor.putString("woundWood", sWoundWood.selectedItem.toString())
+        editor.putString("vigor", sVigor.selectedItem.toString())
         editor.putString("hama", etHama.text.toString())
         editor.apply()
+    }
+
+    private fun loadValuesFromSharedPreferences(){
+        val epicormicCheckedId = sharedPreferences.getInt("epicormic", -1)
+        if (epicormicCheckedId != -1) {
+            rgEpicormic.check(epicormicCheckedId)
+        }
+
+        val ukuranDaunCheckedId = sharedPreferences.getInt("ukuranDaun", -1)
+        if (ukuranDaunCheckedId != -1) {
+            rgUkuranDaun.check(ukuranDaunCheckedId)
+        }
+
+        val twigCheckedId = sharedPreferences.getInt("twig", -1)
+        if (twigCheckedId != -1) {
+            rgTwig.check(twigCheckedId)
+        }
+
+        etHama.setText(sharedPreferences.getString("hama", ""))
+
+        val warnaDaunValue = sharedPreferences.getString("warnaDaun", "")
+        val warnaDaunPosition = resources.getStringArray(R.array.WarnaDaun).indexOf(warnaDaunValue)
+        sWarnaDaun.setSelection(if (warnaDaunPosition != -1) warnaDaunPosition else 0)
+
+        val kerapatanDaunValue = sharedPreferences.getString("kerapatanDaun", "")
+        val kerapatanDaunPosition = resources.getStringArray(R.array.KerapatanDaun).indexOf(kerapatanDaunValue)
+        sKerapatanDaun.setSelection(if (kerapatanDaunPosition != -1) kerapatanDaunPosition else 0)
+
+        val woundWoodValue = sharedPreferences.getString("woundWood", "")
+        val woundWoodPosition = resources.getStringArray(R.array.WoundWood).indexOf(woundWoodValue)
+        sWoundWood.setSelection(if (woundWoodPosition != -1) woundWoodPosition else 0)
+
+        val vigorValue = sharedPreferences.getString("vigor", "")
+        val vigorPosition = resources.getStringArray(R.array.Vigor).indexOf(vigorValue)
+        sVigor.setSelection(if (vigorPosition != -1) vigorPosition else 0)
     }
 
     @SuppressLint("MissingSuperCall")
