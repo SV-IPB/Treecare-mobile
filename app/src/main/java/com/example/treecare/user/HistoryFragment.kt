@@ -321,7 +321,9 @@ class HistoryFragment : Fragment(), PengamatanInterface {
                     return
                 }
                 if (body.data?.data == null || body.data?.data?.size == 0) {
-                    tvNoRiwayat.visibility = View.VISIBLE
+                    if (listRiwayat.isEmpty()) {
+                        tvNoRiwayat.visibility = View.VISIBLE
+                    }
 
                     return
                 } else {
@@ -330,7 +332,7 @@ class HistoryFragment : Fragment(), PengamatanInterface {
 
                 totalPage = body.data?.totalPage!!
 
-                for (riwayat in body?.data?.data!!) {
+                for (riwayat in body.data?.data!!) {
                     var newRiwayat = RiwayatPohonModel()
                     var user = UserModel()
                     var identitasPohon = IdentitasPohonModel()
