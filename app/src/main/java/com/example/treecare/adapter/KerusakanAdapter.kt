@@ -42,7 +42,7 @@ class KerusakanAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currPos = position + 1
-        holder.tvKerusakan.text = "Kerusakan $currPos"
+        holder.tvKerusakan.text = "Kerusakan-$currPos"
     }
 
     override fun getItemCount(): Int {

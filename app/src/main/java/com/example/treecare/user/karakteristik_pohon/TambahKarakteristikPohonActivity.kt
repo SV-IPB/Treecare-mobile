@@ -60,12 +60,7 @@ class TambahKarakteristikPohonActivity : AppCompatActivity() {
         sBentuk = findViewById(R.id.sBentuk)
         sSejarahPemangkasan = findViewById(R.id.sSejarahPemangkasan)
 
-        etKeliling.setText(sharedPreferences.getString("keliling", ""))
-        etTinggi.setText(sharedPreferences.getString("tinggi", ""))
-        etLebarTajuk.setText(sharedPreferences.getString("lebarTajuk", ""))
-        etCrownRatio.setText(sharedPreferences.getString("crownRatio", ""))
-        sBentuk.setSelection(sharedPreferences.getInt("bentuk", 0))
-        sSejarahPemangkasan.setSelection(sharedPreferences.getInt("sejarahPemangkasan", 0))
+        loadValuesFromSharedPreferences()
 
         val btnBack: ImageView = findViewById(R.id.btnBack)
         val btnSelanjutnya: AppCompatButton = findViewById(R.id.btnSelanjutnya)
@@ -97,9 +92,24 @@ class TambahKarakteristikPohonActivity : AppCompatActivity() {
         editor.putString("tinggi", etTinggi.text.toString())
         editor.putString("lebarTajuk", etLebarTajuk.text.toString())
         editor.putString("crownRatio", etCrownRatio.text.toString())
-        editor.putInt("bentuk", sBentuk.selectedItemPosition)
-        editor.putInt("sejarahPemangkasan", sSejarahPemangkasan.selectedItemPosition)
+        editor.putString("bentuk", sBentuk.selectedItem.toString())
+        editor.putString("sejarahPemangkasan", sSejarahPemangkasan.selectedItem.toString())
         editor.apply()
+    }
+
+    private fun loadValuesFromSharedPreferences() {
+        etKeliling.setText(sharedPreferences.getString("keliling", ""))
+        etTinggi.setText(sharedPreferences.getString("tinggi", ""))
+        etLebarTajuk.setText(sharedPreferences.getString("lebarTajuk", ""))
+        etCrownRatio.setText(sharedPreferences.getString("crownRatio", ""))
+
+        val bentukValue = sharedPreferences.getString("bentuk", "")
+        val bentukPosition = resources.getStringArray(R.array.Bentuk).indexOf(bentukValue)
+        sBentuk.setSelection(if (bentukPosition != -1) bentukPosition else 0)
+
+        val sejarahPemangkasanValue = sharedPreferences.getString("sejarahPemangkasan", "")
+        val sejarahPemangkasanPosition = resources.getStringArray(R.array.SejarahPemangkasan).indexOf(sejarahPemangkasanValue)
+        sSejarahPemangkasan.setSelection(if (sejarahPemangkasanPosition != -1) sejarahPemangkasanPosition else 0)
     }
 
     private fun clearSharedPreferences() {

@@ -1,7 +1,9 @@
 package com.example.treecare.user.pengamatan_visual
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.adapter.PengamatanAdapter
 import com.example.treecare.interfaces.PengamatanInterface
+import com.example.treecare.service.KerusakanPreferenceManager
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
 import com.example.treecare.service.api.v1.RiwayatPohonService
@@ -57,6 +60,14 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
     private lateinit var pbLoading: ProgressBar
     private lateinit var preferenceManager: PreferenceManager
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
+
+    private lateinit var kerusakanPreferenceManager: KerusakanPreferenceManager
+    private lateinit var counterPreferences: SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferences2: SharedPreferences
+    private lateinit var sharedPreferences3: SharedPreferences
+    private lateinit var sharedPreferences4: SharedPreferences
+    private lateinit var sharedPreferences5: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +116,16 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
         pbLoading   = view.findViewById(R.id.pbLoading)
 
+        kerusakanPreferenceManager = KerusakanPreferenceManager(requireContext())
+        sharedPreferences = requireActivity().getSharedPreferences("KarakteristikPohon", Context.MODE_PRIVATE)
+        sharedPreferences2 = requireActivity().getSharedPreferences("KesehatanPohon", Context.MODE_PRIVATE)
+        sharedPreferences3 = requireActivity().getSharedPreferences("KerusakanPohon", Context.MODE_PRIVATE)
+        sharedPreferences4 = requireActivity().getSharedPreferences("KondisiTapak", Context.MODE_PRIVATE)
+        sharedPreferences5 = requireActivity().getSharedPreferences("Target", Context.MODE_PRIVATE)
+
         preferenceManager = PreferenceManager(requireContext())
+        counterPreferences = requireActivity().getSharedPreferences("kerusakanCounter", Context.MODE_PRIVATE)
+        addCounter()
         rvPengamatan = view.findViewById(R.id.rvPengamatan)
 
         rvPengamatan.layoutManager = LinearLayoutManager(
@@ -128,6 +148,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         }
 
         fab.setOnClickListener {
+            clearSharedPreferences()
             val intent = Intent(context, TambahKarakteristikPohonActivity::class.java)
             intent.putExtra("nomor",nomorPohon)
             intent.putExtra("responseCode",codeResponse)
@@ -243,5 +264,26 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         intent.putExtra("idRiwayat", data.id)
         intent.putExtra("dataRiwayat", extras)
         startActivity(intent)
+    }
+
+    private fun addCounter(){
+        val editor = counterPreferences.edit()
+        editor.putInt("counter",0)
+        editor.apply()
+        Log.e("Debug counter: ", counterPreferences.getInt("counter",-1).toString())
+    }
+
+    private fun clearSharedPreferences() {
+        val editor = sharedPreferences.edit()
+        val editor2 = sharedPreferences2.edit()
+        val editor3= sharedPreferences3.edit()
+        val editor4 = sharedPreferences4.edit()
+        val editor5 = sharedPreferences5.edit()
+        editor.clear().apply()
+        editor2.clear().apply()
+        editor3.clear().apply()
+        editor4.clear().apply()
+        editor5.clear().apply()
+        kerusakanPreferenceManager.removeData()
     }
 }
