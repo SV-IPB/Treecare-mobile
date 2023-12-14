@@ -44,7 +44,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var nomor: String
     private lateinit var codeResponse: String
-    private lateinit var id_pohon: String
+    private lateinit var idPohon: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_indentitas_pohon)
@@ -53,6 +53,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
 
         nomor = intent.getStringExtra("nomor").toString()
         codeResponse = intent.getStringExtra("responseCode").toString()
+        idPohon = intent.getStringExtra("idPohon").toString()
 
         ivFoto = findViewById(R.id.ivFoto)
         etNomorPohon = findViewById(R.id.etNomorPohon)
@@ -76,10 +77,11 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
         mapView.controller.setCenter(GeoPoint(-6.5971,106.8060))
 
         btnBack.setOnClickListener {
-            val intent = Intent(this, PengamatanVisualActivity::class.java)
-            intent.putExtra("nomor", nomor)
-            intent.putExtra("responseCode", codeResponse)
-            startActivity(intent)
+//            val intent = Intent(this, PengamatanVisualActivity::class.java)
+//            intent.putExtra("nomor", nomor)
+//            intent.putExtra("responseCode", codeResponse)
+//            intent.putExtra("id",idPohon)
+//            startActivity(intent)
             finish()
         }
 
@@ -87,7 +89,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, EditIdentitasPohonActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
-            intent.putExtra("id",id_pohon)
+            intent.putExtra("id",idPohon)
             startActivity(intent)
             finish()
         }
@@ -96,9 +98,9 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, RiwayatPerubahanActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
-            intent.putExtra("id",id_pohon)
+            intent.putExtra("id",idPohon)
             startActivity(intent)
-            finish()
+//            finish()
         }
     }
 
@@ -136,7 +138,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
                 Picasso.get().invalidate(imgUri)
                 Picasso.get().load(imgUri).into(ivFoto)
 
-                id_pohon = response.body()?.data?.id.toString()
+                idPohon = response.body()?.data?.id.toString()
                 etNomorPohon.text = response.body()?.data?.nomorPohon
                 etAlamat.text = response.body()?.data?.alamat
                 tvCoordinate.text = "$latitude, $longitude"
@@ -159,10 +161,11 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        val intent = Intent(this, PengamatanVisualActivity::class.java)
-        intent.putExtra("nomor", nomor)
-        intent.putExtra("responseCode", codeResponse)
-        startActivity(intent)
+//        val intent = Intent(this, PengamatanVisualActivity::class.java)
+//        intent.putExtra("nomor", nomor)
+//        intent.putExtra("responseCode", codeResponse)
+//        intent.putExtra("id",idPohon)
+//        startActivity(intent)
         finish()
     }
 }

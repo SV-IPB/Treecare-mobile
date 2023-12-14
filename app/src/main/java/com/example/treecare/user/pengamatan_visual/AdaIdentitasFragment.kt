@@ -74,7 +74,6 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         nomorPohon = requireArguments().getString("nomor").toString()
         codeResponse = requireArguments().getString("responseCode")
         idPohon = requireArguments().getString("idPohon")
-        Log.e("LOGGING FROM ADAIDENTITASRFRAGMENT-------> ",idPohon.toString())
         return view
     }
 
@@ -123,8 +122,9 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             val intent = Intent(context, DetailIndentitasPohonActivity::class.java)
             intent.putExtra("nomor",nomorPohon)
             intent.putExtra("responseCode",codeResponse)
+            intent.putExtra("id", idPohon)
             startActivity(intent)
-            activity?.finish()
+//            activity?.finish()
         }
 
         fab.setOnClickListener {
