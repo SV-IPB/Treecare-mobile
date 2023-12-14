@@ -2,6 +2,7 @@ package com.example.treecare.service.api.v1
 
 import com.example.treecare.service.api.v1.request.IdentitasPohonRequest
 import com.example.treecare.service.api.v1.response.IdentitasPohonResponse
+import com.example.treecare.service.api.v1.response.RiwayatPerubahanResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -34,5 +35,5 @@ interface PohonService {
     fun getAudit(
         @Path("id") id: String?,
         @Header("Authorization") accessToken: String?
-    ): Call<String>
+    ): Call<RiwayatPerubahanResponse>
 }
