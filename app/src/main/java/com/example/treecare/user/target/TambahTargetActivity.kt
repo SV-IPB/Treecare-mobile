@@ -319,9 +319,6 @@ class TambahTargetActivity : AppCompatActivity() {
 
         btnKembali.setOnClickListener {
             dialog.dismiss()
-            if (!isFinishing) {
-                finish()
-            }
         }
 
         if (!isFinishing) {
