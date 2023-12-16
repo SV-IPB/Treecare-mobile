@@ -627,13 +627,30 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        saveValuesToSharedPreferences()
-        val intent = Intent(this, KerusakanPohonActivity::class.java)
-        intent.putExtra("idPohon",id_pohon)
-        intent.putExtra("nomor",nomorPohon)
-        intent.putExtra("responseCode",codeResponse)
-        startActivity(intent)
-        finish()
+        if (rvCounter > 0){
+            clearSharedPreferences()
+            saveValuesToListKerusakan(rvCounter)
+            val intent = Intent(this, KerusakanPohonActivity::class.java)
+            intent.putExtra("idPohon",id_pohon)
+            intent.putExtra("nomor",nomorPohon)
+            intent.putExtra("responseCode",codeResponse)
+            startActivity(intent)
+            finish()
+            Log.e("Debug rvCounter back","rvCounter : $rvCounter")
+        }else{
+            if (counter >= 0){
+                decreaseCounter()
+                saveValuesToSharedPreferences()
+                val intent = Intent(this, KerusakanPohonActivity::class.java)
+                intent.putExtra("idPohon",id_pohon)
+                intent.putExtra("nomor",nomorPohon)
+                intent.putExtra("responseCode",codeResponse)
+                startActivity(intent)
+                finish()
+            }else{
+                Log.e("Debug counter back","counter < 0 : $counter")
+            }
+        }
     }
 
     override fun onItemClick(position: Int) {

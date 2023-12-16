@@ -1,6 +1,7 @@
 package com.example.treecare.service.api.v1
 
 import com.example.treecare.service.api.v1.request.IdentitasPohonRequest
+import com.example.treecare.service.api.v1.response.AllIdentitasPohonResponse
 import com.example.treecare.service.api.v1.response.IdentitasPohonResponse
 import com.example.treecare.service.api.v1.response.RiwayatPerubahanResponse
 import retrofit2.Call
@@ -36,4 +37,9 @@ interface PohonService {
         @Path("id") id: String?,
         @Header("Authorization") accessToken: String?
     ): Call<RiwayatPerubahanResponse>
+
+    @GET("pohon")
+    fun getAllPohon(
+        @Header("Authorization") accessToken: String?
+    ):Call<AllIdentitasPohonResponse>
 }

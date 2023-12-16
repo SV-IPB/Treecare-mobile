@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
@@ -49,6 +50,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
     private var param2: String? = null
 
     private lateinit var preferenceManager: PreferenceManager
+    private lateinit var clMap: ConstraintLayout
     private lateinit var rvHome: RecyclerView
     private lateinit var tvNoRiwayat: TextView
     private lateinit var searchEditText: EditText
@@ -98,6 +100,7 @@ class HomeFragment : Fragment(), PengamatanInterface {
 
         searchEditText = view.findViewById(R.id.searchEditText)
         searchIcon = view.findViewById(R.id.searchIcon)
+        clMap = view.findViewById(R.id.clMap)
         val tvPengamatanTerbaru: TextView = view.findViewById(R.id.tvPengamatanTerbaru)
         rvHome = view.findViewById(R.id.rvHome)
         tvNoRiwayat = view.findViewById(R.id.tvNoRiwayat)
@@ -108,6 +111,11 @@ class HomeFragment : Fragment(), PengamatanInterface {
         rvHome.adapter = PengamatanAdapter(requireContext(), listRiwayat, this)
 
         tvNoRiwayat.visibility = View.GONE
+
+        clMap.setOnClickListener {
+            val intent = Intent(requireContext(), MapPohonActivity::class.java)
+            startActivity(intent)
+        }
 
         searchIcon.setOnClickListener {
             if (searchEditText.visibility == View.VISIBLE) {
