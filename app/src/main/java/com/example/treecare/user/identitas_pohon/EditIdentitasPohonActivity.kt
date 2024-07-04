@@ -83,7 +83,7 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
 
         nomor = intent.getStringExtra("nomor").toString()
         codeResponse = intent.getStringExtra("responseCode").toString()
-        id_pohon = intent.getStringExtra("id").toString()
+        id_pohon = intent.getStringExtra("idPohon").toString()
         //Toast.makeText(this,"id: $id_pohon",Toast.LENGTH_SHORT).show()
         //Log.e("Nomor 1:",nomor)
 
@@ -156,8 +156,10 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
             val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
             nomor = intent.getStringExtra("nomor").toString()
             codeResponse = intent.getStringExtra("responseCode").toString()
+            id_pohon = intent.getStringExtra("idPohon").toString()
             cameraIntent.putExtra("nomor", nomor)
             cameraIntent.putExtra("responseCode", codeResponse)
+            cameraIntent.putExtra("idPohon",id_pohon)
             //Log.e("Nomor 2:", nomor)
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
         }
@@ -180,6 +182,7 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
+            intent.putExtra("idPohon",id_pohon)
             startActivity(intent)
             finish()
         }
@@ -190,16 +193,20 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
             pemilik = etPemilikLainnya.text.toString()
         }
         val id = id_pohon
+        Log.e("debug id_pohon", id)
         val request = IdentitasPohonRequest()
         request.nomorPohon = nomor
         request.alamat = etAlamat.text.toString()
         request.latitude = Latitude.toFloat()
+        Log.e("debug update pohon lat: ", request.latitude.toString())
         request.longitude = Longitude.toFloat()
+        Log.e("debug update phon long: ", request.longitude.toString())
         request.namaProyek = etNamaProyek.text.toString()
         request.namaPemilik = pemilik
         request.jenisPohon = etJenisPohon.text.toString()
         request.nilaiSpesial = nilai_spesial
         request.gambar = "data:image/png;base64,$base64String"
+        Log.e("debug full request:", request.toString())
         val token = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
@@ -208,11 +215,11 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
         val Retro = RetrofitHelperV1().getApiClientAuth(okHttpClient).create(PohonService::class.java)
         Retro.updatePohon(id, request, token).enqueue(object : Callback<IdentitasPohonResponse> {
             override fun onResponse(call: Call<IdentitasPohonResponse>, response: Response<IdentitasPohonResponse>) {
-                Log.e("Raw Response: ", response.raw().toString())
+                Log.e("Debug Raw Response: ", response.raw().toString())
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val responseBody = gson.toJson(response.body())
                 val responseCode = response.code()
-                Log.e("Body: ", responseBody)
+                Log.e("Debug Body: ", responseBody)
 
                 val intent = Intent(this@EditIdentitasPohonActivity, DetailIndentitasPohonActivity::class.java)
                 intent.putExtra("nomor", response.body()?.data?.nomorPohon.toString())
@@ -223,8 +230,8 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<IdentitasPohonResponse>, t: Throwable) {
-                Log.e("Network API Error: ", t.message.toString())
-                Log.e("Error: ","network or API call failure")
+                Log.e("Debug Network API Error: ", t.message.toString())
+                Log.e("Debug Error: ","network or API call failure")
             }
         })
     }
@@ -244,8 +251,8 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
                 val responseCode = response.code()
                 Log.e("Body: ", responseBody)
 
-                val latitude = response.body()?.data?.latitude
-                val longitude = response.body()?.data?.longitude
+                Latitude = response.body()?.data?.latitude?.toDouble() ?: 0.0
+                Longitude = response.body()?.data?.longitude?.toDouble() ?: 0.0
 
                 val imgUri = response.body()?.data?.gambar
                 Picasso.get().invalidate(imgUri)
@@ -253,7 +260,7 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
 
                 etNomorPohon.text = response.body()?.data?.nomorPohon
                 etAlamat.setText(response.body()?.data?.alamat)
-                tvCoordinate.text = "$latitude, $longitude"
+                tvCoordinate.text = "$Latitude, $Longitude"
                 etNamaProyek.setText(response.body()?.data?.namaProyek)
 
                 val pemilikValue = response.body()?.data?.namaPemilik
@@ -426,6 +433,7 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
         val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
         intent.putExtra("nomor", nomor)
         intent.putExtra("responseCode", codeResponse)
+        intent.putExtra("idPohon",id_pohon)
         startActivity(intent)
         finish()
     }
@@ -434,6 +442,7 @@ class EditIdentitasPohonActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putString("nomor", nomor)
         outState.putString("codeResponse", codeResponse)
+        outState.putString("idPohon", id_pohon)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

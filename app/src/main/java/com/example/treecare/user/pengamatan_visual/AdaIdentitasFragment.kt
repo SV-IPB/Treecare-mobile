@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.adapter.PengamatanAdapter
 import com.example.treecare.interfaces.PengamatanInterface
+import com.example.treecare.service.ImagePreferenceManager
 import com.example.treecare.service.KerusakanPreferenceManager
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.api.v1.RetrofitHelperV1
@@ -62,6 +63,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
     private val listRiwayat = ArrayList<RiwayatPohonModel>()
 
     private lateinit var kerusakanPreferenceManager: KerusakanPreferenceManager
+    private lateinit var imagePreferenceManager: ImagePreferenceManager
     private lateinit var counterPreferences: SharedPreferences
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferences2: SharedPreferences
@@ -117,6 +119,7 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         pbLoading   = view.findViewById(R.id.pbLoading)
 
         kerusakanPreferenceManager = KerusakanPreferenceManager(requireContext())
+        imagePreferenceManager = ImagePreferenceManager(requireContext())
         sharedPreferences = requireActivity().getSharedPreferences("KarakteristikPohon", Context.MODE_PRIVATE)
         sharedPreferences2 = requireActivity().getSharedPreferences("KesehatanPohon", Context.MODE_PRIVATE)
         sharedPreferences3 = requireActivity().getSharedPreferences("KerusakanPohon", Context.MODE_PRIVATE)
@@ -142,9 +145,9 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
             val intent = Intent(context, DetailIndentitasPohonActivity::class.java)
             intent.putExtra("nomor",nomorPohon)
             intent.putExtra("responseCode",codeResponse)
-            intent.putExtra("id", idPohon)
+            intent.putExtra("idPohon", idPohon)
             startActivity(intent)
-//            activity?.finish()
+            activity?.finish()
         }
 
         fab.setOnClickListener {
@@ -285,5 +288,6 @@ class AdaIdentitasFragment : Fragment(), PengamatanInterface {
         editor4.clear().apply()
         editor5.clear().apply()
         kerusakanPreferenceManager.removeData()
+        imagePreferenceManager.removeData()
     }
 }

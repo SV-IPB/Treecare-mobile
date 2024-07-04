@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASEURL = "https://treecare.pegelinux.my.id/api/v1/"
+const val BASEURLV2 = "https://treecare.pegelinux.my.id/api/v2/"
 class RetrofitHelperV1 {
 
     private var retrofit: Retrofit? = null
@@ -32,6 +33,22 @@ class RetrofitHelperV1 {
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
                 .baseUrl(BASEURL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build()
+        }
+
+        return retrofit!!
+    }
+
+    fun getApiClientAuthV2(okHttpClient: OkHttpClient): Retrofit {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        if (retrofit == null) {
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASEURLV2)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build()
