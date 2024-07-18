@@ -43,6 +43,7 @@ import java.util.Date
 import java.util.Locale
 import android.util.Base64
 import android.widget.TextView
+import com.example.treecare.service.ImagePreferenceManager
 import com.example.treecare.service.KerusakanPreferenceManager
 import com.example.treecare.service.model.RiwayatKerusakanPohonModel
 
@@ -80,6 +81,7 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var kerusakanPreferenceManager: KerusakanPreferenceManager
+    private lateinit var imagePreferenceManager: ImagePreferenceManager
     private val listKerusakan: ArrayList<RiwayatKerusakanPohonModel> = ArrayList()
     private var base64Image: String? = null
     private var listBase64Image: List<String>? = null
@@ -114,6 +116,7 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
         preferenceManager = PreferenceManager(this)
         kerusakanPreferenceManager = KerusakanPreferenceManager(this)
+        imagePreferenceManager = ImagePreferenceManager(this)
         counterPreferences = getSharedPreferences("kerusakanCounter", Context.MODE_PRIVATE)
 
         counter = counterPreferences.getInt("counter",-1)
@@ -311,9 +314,27 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
             Log.e("Debug img save: ", "image_$index")
         }
 
+        val imageFileList = ArrayList<File>()
+        val imageFileNames = ArrayList<String>()
+
+        val imageUrlsKey = "image_urls_list"
+        for ((index, imageUri) in selectedImages.withIndex()) {
+            val imageFileName = "${nomorPohon}_kerusakan-${newCounter}_image-${index + 1}_${SimpleDateFormat("yyyyMMdd-HHmmssSSS", Locale.getDefault()).format(Date())}.png"
+            imageFileNames.add(imageFileName)
+            val imageFile = File(filesDir, "images/$imageFileName")
+            imageFileList.add(imageFile)
+            imagePreferenceManager.addImageUriToList(imageUrlsKey, imageFile.absolutePath)
+            contentResolver.openInputStream(imageUri)?.use { input ->
+                imageFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+
         listKerusakan.add(RiwayatKerusakanPohonModel(
             null,
             null,
+            imageFileNames,
             listBase64Image,
             BagianPohon,
             DeskripsiKerusakan,
@@ -323,6 +344,7 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
             null,
             KeperluanTindakan,
             Pemangkasan,
+            DeskripsiPemangkasan,
             Dipindahkan,
             TDipindahkan,
             SaranLainnya
@@ -335,15 +357,16 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 //        }
 
         for (item in listKerusakan) {
-            Log.e("KerusakanValues", "BagianPohon: ${item.bagianPohon}")
-            Log.e("KerusakanValues", "DeskripsiKerusakan: ${item.deksripsi}")
-            Log.e("KerusakanValues", "PotensiKegagalanInt: ${item.potensiKegagalan}")
-            Log.e("KerusakanValues", "UkuranBagianInt: ${item.ukuranBagianPohon}")
-            Log.e("KerusakanValues", "PeringkatTargetInt: ${item.peringkatTarget}")
-            Log.e("KerusakanValues", "KeperluanTindakan: ${item.butuhTindakan}")
+            Log.e("KerusakanValues", "BagianPohon: ${item.bagian_pohon}")
+            Log.e("KerusakanValues", "DeskripsiKerusakan: ${item.deskripsi}")
+            Log.e("KerusakanValues", "PotensiKegagalanInt: ${item.potensi_kegagalan}")
+            Log.e("KerusakanValues", "UkuranBagianInt: ${item.ukuran_bagian_pohon}")
+            Log.e("KerusakanValues", "PeringkatTargetInt: ${item.peringkat_target}")
+            Log.e("KerusakanValues", "KeperluanTindakan: ${item.butuh_tindakan}")
             Log.e("KerusakanValues", "Pemangkasan: ${item.pemangkasan}")
-            Log.e("KerusakanValues", "Dipindahkan: ${item.pohonDipindahkan}")
-            Log.e("KerusakanValues", "TDipindahkan: ${item.targetDipindahkan}")
+            Log.e("KerusakanValues", "Detail Pemangkasan: ${item.detail_pemangkasan}")
+            Log.e("KerusakanValues", "Dipindahkan: ${item.pohon_dipindahkan}")
+            Log.e("KerusakanValues", "TDipindahkan: ${item.target_dipindahkan}")
             Log.e("KerusakanValues", "SaranLainnya: ${item.saran}")
         }
         kerusakanPreferenceManager.setList("kerusakan-$newCounter",listKerusakan)
@@ -352,7 +375,7 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
         if (riwayatKerusakanList != null) {
             for (riwayatKerusakan in riwayatKerusakanList) {
-                Log.e("Debug KerusakanData", "RiwayatKerusakan-$newCounter: $riwayatKerusakan")
+                //Log.e("Debug KerusakanData", "RiwayatKerusakan-$newCounter: $riwayatKerusakan")
             }
         } else {
             Log.e("Debug KerusakanData", "RiwayatKerusakan list is null")
@@ -398,49 +421,49 @@ class TambahKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
 
         if (riwayatKerusakanList != null) {
             for (riwayatKerusakan in riwayatKerusakanList) {
-                Log.e("Debug load KerusakanData", "RiwayatKerusakan-$newCounter: $riwayatKerusakan")
+                //Log.e("Debug load KerusakanData", "RiwayatKerusakan-$newCounter: $riwayatKerusakan")
 
-                val bagianPohonValue = riwayatKerusakan?.bagianPohon
+                val bagianPohonValue = riwayatKerusakan?.bagian_pohon
                 val bagianPohonPosition = resources.getStringArray(R.array.BagianPohon).indexOf(bagianPohonValue)
                 sBagianPohon.setSelection(if (bagianPohonPosition != -1) bagianPohonPosition else 0)
 
-                val potensiKegagalanValue = riwayatKerusakan?.potensiKegagalan?.minus(1)
+                val potensiKegagalanValue = riwayatKerusakan?.potensi_kegagalan?.minus(1)
                 sPotensiKegagalan.setSelection(potensiKegagalanValue ?: 0)
 
-                val ukuranBagianValue = riwayatKerusakan?.ukuranBagianPohon?.minus(1)
+                val ukuranBagianValue = riwayatKerusakan?.ukuran_bagian_pohon?.minus(1)
                 sUkuranBagian.setSelection(ukuranBagianValue ?: 0)
 
-                val peringkatTargetValue = riwayatKerusakan?.peringkatTarget?.minus(1)
+                val peringkatTargetValue = riwayatKerusakan?.peringkat_target?.minus(1)
                 sPeringkatTarget.setSelection(peringkatTargetValue ?: 0)
 
                 val pemangkasanValue = riwayatKerusakan?.pemangkasan
                 val pemangkasanPosition = resources.getStringArray(R.array.Pemangkasan).indexOf(pemangkasanValue)
                 sPemangkasan.setSelection(if (pemangkasanPosition != -1) pemangkasanPosition else 0)
 
-                if (riwayatKerusakan?.butuhTindakan == true) {
+                if (riwayatKerusakan?.butuh_tindakan == true) {
                     rbYaTindakan.isChecked = true
                 } else {
                     rbTidakTindakan.isChecked = true
                 }
 
-                if (riwayatKerusakan?.pohonDipindahkan == true) {
+                if (riwayatKerusakan?.pohon_dipindahkan == true) {
                     rbYaDipindahkan.isChecked = true
                 } else {
                     rbTidakDipindahkan.isChecked = true
                 }
 
-                if (riwayatKerusakan?.targetDipindahkan == true) {
+                if (riwayatKerusakan?.target_dipindahkan == true) {
                     rbYaTDipindahkan.isChecked = true
                 } else {
                     rbTidakTDipindahkan.isChecked = true
                 }
 
-                etDeskripsiKerusakan.setText(riwayatKerusakan?.deksripsi)
-                //etDeskripsiPemangkasan.setText(riwayatKerusakan?.deskripsiPemangkasan)
+                etDeskripsiKerusakan.setText(riwayatKerusakan?.deskripsi)
+                etDeskripsiPemangkasan.setText(riwayatKerusakan?.detail_pemangkasan)
                 etSaranLainnya.setText(riwayatKerusakan?.saran)
 
                 selectedImages.clear()
-                val gambarKerusakan = riwayatKerusakan?.gambarKerusakan
+                val gambarKerusakan = riwayatKerusakan?.gambarKerusakkan
                 gambarKerusakan?.let {
                     for ((index, image) in it.withIndex()) {
                         val imageUri = base64ToUri(image)

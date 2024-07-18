@@ -77,11 +77,11 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
         mapView.controller.setCenter(GeoPoint(-6.5971,106.8060))
 
         btnBack.setOnClickListener {
-//            val intent = Intent(this, PengamatanVisualActivity::class.java)
-//            intent.putExtra("nomor", nomor)
-//            intent.putExtra("responseCode", codeResponse)
-//            intent.putExtra("id",idPohon)
-//            startActivity(intent)
+            val intent = Intent(this, PengamatanVisualActivity::class.java)
+            intent.putExtra("nomor", nomor)
+            intent.putExtra("responseCode", codeResponse)
+            intent.putExtra("idPohon",idPohon)
+            startActivity(intent)
             finish()
         }
 
@@ -89,7 +89,7 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, EditIdentitasPohonActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
-            intent.putExtra("id",idPohon)
+            intent.putExtra("idPohon",idPohon)
             startActivity(intent)
             finish()
         }
@@ -98,9 +98,9 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
             val intent = Intent(this, RiwayatPerubahanActivity::class.java)
             intent.putExtra("nomor", nomor)
             intent.putExtra("responseCode", codeResponse)
-            intent.putExtra("id",idPohon)
+            intent.putExtra("idPohon",idPohon)
             startActivity(intent)
-//            finish()
+            finish()
         }
     }
 
@@ -161,11 +161,11 @@ class DetailIndentitasPohonActivity : AppCompatActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-//        val intent = Intent(this, PengamatanVisualActivity::class.java)
-//        intent.putExtra("nomor", nomor)
-//        intent.putExtra("responseCode", codeResponse)
-//        intent.putExtra("id",idPohon)
-//        startActivity(intent)
+        val intent = Intent(this, PengamatanVisualActivity::class.java)
+        intent.putExtra("nomor", nomor)
+        intent.putExtra("responseCode", codeResponse)
+        intent.putExtra("idPohon",idPohon)
+        startActivity(intent)
         finish()
     }
 }

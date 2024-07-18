@@ -19,26 +19,28 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.example.treecare.R
+import com.example.treecare.service.ImagePreferenceManager
 import com.example.treecare.service.KerusakanPreferenceManager
 import com.example.treecare.service.PreferenceManager
-import com.example.treecare.service.api.v1.PohonService
 import com.example.treecare.service.api.v1.RetrofitHelperV1
 import com.example.treecare.service.api.v1.RiwayatPohonService
 import com.example.treecare.service.api.v1.TokenAuthenticator
-import com.example.treecare.service.api.v1.request.RiwayatKerusakanPohon
 import com.example.treecare.service.api.v1.request.RiwayatPohonRequest
-import com.example.treecare.service.api.v1.response.IdentitasPohonResponse
-import com.example.treecare.service.api.v1.response.RiwayatPohonsResponse
-import com.example.treecare.service.model.RiwayatKerusakanPohonModel
+import com.example.treecare.service.api.v1.request.riwayatKerusakanPohon
+import com.example.treecare.service.api.v1.response.RiwayatPohonResponse
 import com.example.treecare.user.kondisi_tapak.TambahKondisiTapakActivity
 import com.example.treecare.user.pengamatan_visual.PengamatanVisualActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.TimeUnit
+import java.io.File
+import javax.activation.MimetypesFileTypeMap
 
 class TambahTargetActivity : AppCompatActivity() {
 
@@ -58,6 +60,7 @@ class TambahTargetActivity : AppCompatActivity() {
     private lateinit var codeResponse: String
 
     private lateinit var kerusakanPreferenceManager: KerusakanPreferenceManager
+    private lateinit var imagePreferenceManager: ImagePreferenceManager
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var sharedPreferences2: SharedPreferences
     private lateinit var sharedPreferences3: SharedPreferences
@@ -74,6 +77,7 @@ class TambahTargetActivity : AppCompatActivity() {
         counterPreferences = getSharedPreferences("kerusakanCounter", Context.MODE_PRIVATE)
 
         kerusakanPreferenceManager = KerusakanPreferenceManager(this)
+        imagePreferenceManager = ImagePreferenceManager(this)
         sharedPreferences = getSharedPreferences("Target", Context.MODE_PRIVATE)
         sharedPreferences2 = getSharedPreferences("KarakteristikPohon", Context.MODE_PRIVATE)
         sharedPreferences3 = getSharedPreferences("KesehatanPohon", Context.MODE_PRIVATE)
@@ -152,141 +156,200 @@ class TambahTargetActivity : AppCompatActivity() {
     }
 
     private fun createHistory(){
-        val request = RiwayatPohonRequest()
+        //images
+        fun getFileMimeType(file: File): String {
+            val mimeTypesMap = MimetypesFileTypeMap()
+            return mimeTypesMap.getContentType(file)
+        }
+
+        fun convertToPNG(file: File): File {
+            return file
+        }
+        val imageUrls = imagePreferenceManager.getList("image_urls_list")
+        Log.e("Debug Request Image Path", "list image: $imageUrls")
+        val imageParts = mutableListOf<MultipartBody.Part>()
+
+        imageUrls?.forEach { imageUrl ->
+            val file = File(imageUrl)
+            val contentType = getFileMimeType(file)
+            Log.e("Debug Content Type", "Content Type: $contentType")
+
+            if (!contentType.startsWith("image/png")) {
+                val pngFile = convertToPNG(file)
+                val requestFile = pngFile.asRequestBody("image/png".toMediaTypeOrNull())
+                val part = MultipartBody.Part.createFormData("image", pngFile.name, requestFile)
+                imageParts.add(part)
+            } else {
+                val requestFile = file.asRequestBody(contentType.toMediaTypeOrNull())
+                val part = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                imageParts.add(part)
+            }
+        }
+
         //karakteristik
-        request.keliling = sharedPreferences2.getString("keliling", "")?.toFloat()
-        request.tinggi = sharedPreferences2.getString("tinggi", "")?.toFloat()
-        request.lebarTajuk = sharedPreferences2.getString("lebarTajuk", "")?.toFloat()
-        request.bentuk = sharedPreferences2.getString("bentuk", "")
-        request.liveCrownRatio = sharedPreferences2.getString("crownRatio", "")?.toInt()
-        request.sejarahPemangkasan = sharedPreferences2.getString("sejarahPemangkasan", "")
+        val keliling = sharedPreferences2.getString("keliling", "")?.toFloat()
+        val tinggi = sharedPreferences2.getString("tinggi", "")?.toFloat()
+        val lebarTajuk = sharedPreferences2.getString("lebarTajuk", "")?.toFloat()
+        val bentuk = sharedPreferences2.getString("bentuk", "")
+        val liveCrownRatio = sharedPreferences2.getString("crownRatio", "")?.toInt()
+        val sejarahPemangkasan = sharedPreferences2.getString("sejarahPemangkasan", "")
+
         //kesehatan
-        request.warnaDaun = sharedPreferences3.getString("warnaDaun", "")
-        request.epicormic = sharedPreferences3.getInt("epicormic", -1) == R.id.rbYaEpicormic
-        request.kerapatanDaun = sharedPreferences3.getString("kerapatanDaun", "")
-        val ukuranDaun = sharedPreferences3.getInt("ukuranDaun", -1)
-        val ukuranDaunString = when (ukuranDaun) {
+        val warnaDaun = sharedPreferences3.getString("warnaDaun", "")
+        val epicormic = sharedPreferences3.getInt("epicormic", -1) == R.id.rbYaEpicormic
+        val kerapatanDaun = sharedPreferences3.getString("kerapatanDaun", "")
+        val ukuranDaunString = when (sharedPreferences3.getInt("ukuranDaun", -1)) {
             0 -> "Normal"
             1 -> "Kecil"
             else -> "Normal"
         }
-        request.ukuranDaun = ukuranDaunString
-        request.woundWood = sharedPreferences3.getString("woundWood", "")
-        request.twigDieback = sharedPreferences3.getInt("twig", -1) == R.id.rbYaTwig
-        request.vigor = sharedPreferences3.getString("vigor", "")
-        request.hama = sharedPreferences3.getString("hama", "")
+        val woundWood = sharedPreferences3.getString("woundWood", "")
+        val twigDieback = sharedPreferences3.getInt("twig", -1) == R.id.rbYaTwig
+        val vigor = sharedPreferences3.getString("vigor", "")
+        val hama = sharedPreferences3.getString("hama", "")
+
         //kerusakan
         val allLists = kerusakanPreferenceManager.getAllLists()
-        val riwayatKerusakanList: MutableList<RiwayatKerusakanPohon> = mutableListOf()
 
-        if (counter > 0) {
-            for ((key, list) in allLists) {
-                if (list != null) {
-                    for (riwayatKerusakanPohonModel in list) {
-                        if (riwayatKerusakanPohonModel != null) {
-                            val gambarKerusakanWithPrefix = riwayatKerusakanPohonModel.gambarKerusakan?.map {
-                                "data:image/png;base64,$it"
-                            }
+        val riwayatKerusakanPohonList: MutableList<riwayatKerusakanPohon> = mutableListOf()
+        val riwayatKerusakanPohonJsonStrings = mutableListOf<String>()
 
-                            val riwayatKerusakanPohon = RiwayatKerusakanPohon(
-                                gambar = gambarKerusakanWithPrefix,
-                                bagian_pohon = riwayatKerusakanPohonModel.bagianPohon,
-                                deskripsi = riwayatKerusakanPohonModel.deksripsi,
-                                potensi_kegagalan = riwayatKerusakanPohonModel.potensiKegagalan,
-                                ukuran_bagian_pohon = riwayatKerusakanPohonModel.ukuranBagianPohon,
-                                peringkat_target = riwayatKerusakanPohonModel.peringkatTarget,
-                                peringkat_bahaya = riwayatKerusakanPohonModel.peringkatBahaya?.toInt(),
-                                butuh_tindakan = riwayatKerusakanPohonModel.butuhTindakan,
-                                pemangkasan = riwayatKerusakanPohonModel.pemangkasan,
-                                pohon_dipindahkan = riwayatKerusakanPohonModel.pohonDipindahkan,
-                                target_dipindahkan = riwayatKerusakanPohonModel.targetDipindahkan,
-                                saran = riwayatKerusakanPohonModel.saran
-                            )
-                            riwayatKerusakanList.add(riwayatKerusakanPohon)
-                            //Log.e("Request", "Riwayat Kerusakan Pohon: $riwayatKerusakanPohon")
-                        }
-                    }
-                }
+        allLists.forEach { (_, list) ->
+            list?.forEach { riwayatKerusakanPohonModel ->
+                val riwayatKerusakanPohon = riwayatKerusakanPohon(
+                    gambar = riwayatKerusakanPohonModel?.gambar ?: listOf(),
+                    deskripsi = riwayatKerusakanPohonModel?.deskripsi ?: "",
+                    bagian_pohon = riwayatKerusakanPohonModel?.bagian_pohon ?: "",
+                    potensi_kegagalan = riwayatKerusakanPohonModel?.potensi_kegagalan ?: 0,
+                    ukuran_bagian_pohon = riwayatKerusakanPohonModel?.ukuran_bagian_pohon ?: 0,
+                    peringkat_target = riwayatKerusakanPohonModel?.peringkat_target ?: 0,
+                    butuh_tindakan = riwayatKerusakanPohonModel?.butuh_tindakan ?: false,
+                    pemangkasan = riwayatKerusakanPohonModel?.pemangkasan ?: "",
+                    detail_pemangkasan = riwayatKerusakanPohonModel?.detail_pemangkasan ?: "",
+                    pohon_dipindahkan = riwayatKerusakanPohonModel?.pohon_dipindahkan ?: false,
+                    target_dipindahkan = riwayatKerusakanPohonModel?.target_dipindahkan ?: false,
+                    saran = riwayatKerusakanPohonModel?.saran ?: ""
+                )
+                riwayatKerusakanPohonList.add(riwayatKerusakanPohon)
+                val riwayatKerusakanPohonJSON = Gson().toJson(riwayatKerusakanPohon)
+                riwayatKerusakanPohonJsonStrings.add(riwayatKerusakanPohonJSON)
             }
         }
 
-        request.riwayatKerusakanPohon = riwayatKerusakanList
         //kondisi tapak
         val karakteristikTapakValue = sharedPreferences5.getString("karakteristikTapak", "")
+        var karakteristikTapak = ""
         if ("Lainnya" == karakteristikTapakValue) {
-            request.karakteristikTapak = sharedPreferences5.getString("karakteristikLainnya", "")
+            karakteristikTapak = sharedPreferences5.getString("karakteristikLainnya", "").toString()
         } else {
-            request.karakteristikTapak = karakteristikTapakValue
+            if (karakteristikTapakValue != null) {
+                karakteristikTapak = karakteristikTapakValue
+            }
         }
-        request.gangguan = sharedPreferences5.getInt("gangguan", -1) == R.id.rbYaGangguan
+        val gangguan = sharedPreferences5.getInt("gangguan", -1) == R.id.rbYaGangguan
         val masalahTanahValue = sharedPreferences5.getString("masalahTanah", "")
+        var masalahTanah = ""
         if ("Lainnya" == masalahTanahValue) {
-            request.masalahTanah = sharedPreferences5.getString("masalahTanahLainnya", "")
+            masalahTanah = sharedPreferences5.getString("masalahTanahLainnya", "").toString()
         } else {
-            request.masalahTanah = masalahTanahValue
+            if (masalahTanahValue != null) {
+                masalahTanah = masalahTanahValue
+            }
         }
         val gangguanLainnyaValue = sharedPreferences5.getString("gangguanLainnya", "")
+        var gangguanLain = ""
         if ("Lainnya" == gangguanLainnyaValue) {
-            request.gangguanLain = sharedPreferences5.getString("gangguanLainnyaText", "")
+            gangguanLain = sharedPreferences5.getString("gangguanLainnyaText", "").toString()
         } else {
-            request.gangguanLain = gangguanLainnyaValue
+            if (gangguanLainnyaValue != null) {
+                gangguanLain = gangguanLainnyaValue
+            }
         }
-        //target
-        request.pemanfaatanSekitar = sharedPreferences.getString("pemanfaatanArea", "")
-        request.dapatDipindahkan = sharedPreferences.getInt("dipindahkan", -1) == R.id.rbYaDipindahkan
-        request.dapatDibatasi = sharedPreferences.getInt("dibatasi", -1) == R.id.rbYaDibatasi
-        request.hunian = sharedPreferences.getString("hunian", "")
 
-//        Log.e("Request", "Keliling: ${request.keliling}")
-//        Log.e("Request", "Tinggi: ${request.tinggi}")
-//        Log.e("Request", "Lebar Tajuk: ${request.lebarTajuk}")
-//        Log.e("Request", "Bentuk: ${request.bentuk}")
-//        Log.e("Request", "Live Crown Ratio: ${request.liveCrownRatio}")
-//        Log.e("Request", "Sejarah Pemangkasan: ${request.sejarahPemangkasan}")
-//        Log.e("Request", "Warna Daun: ${request.warnaDaun}")
-//        Log.e("Request", "Epicormic: ${request.epicormic}")
-//        Log.e("Request", "Kerapatan Daun: ${request.kerapatanDaun}")
-//        Log.e("Request", "Ukuran Daun: ${request.ukuranDaun}")
-//        Log.e("Request", "Wound Wood: ${request.woundWood}")
-//        Log.e("Request", "Twig Dieback: ${request.twigDieback}")
-//        Log.e("Request", "Vigor: ${request.vigor}")
-//        Log.e("Request", "Hama: ${request.hama}")
-//        Log.e("Request", "Karakteristik Tapak: ${request.karakteristikTapak}")
-//        Log.e("Request", "Gangguan: ${request.gangguan}")
-//        Log.e("Request", "Masalah Tanah: ${request.masalahTanah}")
-//        Log.e("Request", "Gangguan lain: ${request.gangguanLain}")
-//        Log.e("Request", "Pemanfaatan Sekitar: ${request.pemanfaatanSekitar}")
-//        Log.e("Request", "Dapat Dipindahkan: ${request.dapatDipindahkan}")
-//        Log.e("Request", "Dapat Dibatasi: ${request.dapatDibatasi}")
-//        Log.e("Request", "Hunian: ${request.hunian}")
-        Log.e("Request", "Full Request: ${Gson().toJson(request)}")
+        //target
+        val pemanfaatanSekitar = sharedPreferences.getString("pemanfaatanArea", "")
+        val dapatDipindahkan = sharedPreferences.getInt("dipindahkan", -1) == R.id.rbYaDipindahkan
+        val dapatDibatasi = sharedPreferences.getInt("dibatasi", -1) == R.id.rbYaDibatasi
+        val hunian = sharedPreferences.getString("hunian", "")
+
+        val pohonRiwayatRequest = RiwayatPohonRequest(
+            imageParts, riwayatKerusakanPohonList,
+            keliling, tinggi, lebarTajuk,
+            bentuk, liveCrownRatio, sejarahPemangkasan,
+            warnaDaun, epicormic, kerapatanDaun,
+            ukuranDaunString, woundWood, twigDieback,
+            vigor, hama, karakteristikTapak,
+            gangguan, masalahTanah, gangguanLain,
+            pemanfaatanSekitar, dapatDipindahkan, dapatDibatasi, hunian
+        )
+
+        Log.e("Debug Request", "Full Request: $pohonRiwayatRequest")
 
         val token = preferenceManager.getAccessToken()
         val tokenAuthenticator = TokenAuthenticator(preferenceManager)
         val okHttpClient = OkHttpClient.Builder()
             .authenticator(tokenAuthenticator)
-            //.connectTimeout(60, TimeUnit.SECONDS)
-            //.readTimeout(60, TimeUnit.SECONDS)
-            //.writeTimeout(60, TimeUnit.SECONDS)
             .build()
 
-        val retro = RetrofitHelperV1().getApiClientAuth(okHttpClient).create(RiwayatPohonService::class.java)
-        retro.createHistory(request,id_pohon,token).enqueue(object : Callback<RiwayatPohonsResponse> {
-            override fun onResponse(call: Call<RiwayatPohonsResponse>, response: Response<RiwayatPohonsResponse>) {
-                Log.e("Raw Response: ", response.raw().toString())
-                Log.e("Raw Response message: ", response.message())
-                Log.e("Raw Response status: ", response.body()?.status.toString())
+        val retro = RetrofitHelperV1().getApiClientAuthV2(okHttpClient).create(RiwayatPohonService::class.java)
+        val call = retro.createHistoryV2(id_pohon, token,
+            pohonRiwayatRequest.image,
+            pohonRiwayatRequest.riwayatKerusakanPohon,
+            pohonRiwayatRequest.keliling!!,
+            pohonRiwayatRequest.tinggi!!,
+            pohonRiwayatRequest.lebarTajuk!!,
+            pohonRiwayatRequest.bentuk!!,
+            pohonRiwayatRequest.liveCrownRatio!!,
+            pohonRiwayatRequest.sejarahPemangkasan!!,
+            pohonRiwayatRequest.warnaDaun!!,
+            pohonRiwayatRequest.epicormic!!,
+            pohonRiwayatRequest.kerapatanDaun!!,
+            pohonRiwayatRequest.ukuranDaun!!,
+            pohonRiwayatRequest.woundWood!!,
+            pohonRiwayatRequest.twigDieback!!,
+            pohonRiwayatRequest.vigor!!,
+            pohonRiwayatRequest.hama!!,
+            pohonRiwayatRequest.karakteristikTapak!!,
+            pohonRiwayatRequest.gangguan!!,
+            pohonRiwayatRequest.masalahTanah!!,
+            pohonRiwayatRequest.gangguanLain!!,
+            pohonRiwayatRequest.pemanfaatanSekitar!!,
+            pohonRiwayatRequest.dapatDipindahkan!!,
+            pohonRiwayatRequest.dapatDibatasi!!,
+            pohonRiwayatRequest.hunian!!,
+            )
+
+        call.enqueue(object : Callback<RiwayatPohonResponse> {
+            override fun onResponse(call: Call<RiwayatPohonResponse>, response: Response<RiwayatPohonResponse>) {
+                Log.e("Debug Raw Response: ", response.raw().toString())
+                Log.e("Debug Raw Response message: ", response.message())
+                Log.e("Debug Raw Response status: ", response.body()?.status.toString())
                 val gson = GsonBuilder().setPrettyPrinting().create()
                 val responseBody = gson.toJson(response.body())
-                Log.e("Body: ", responseBody)
+                Log.e("Debug Body: ", responseBody)
                 pbLoading.visibility = View.INVISIBLE
             }
 
-            override fun onFailure(call: Call<RiwayatPohonsResponse>, t: Throwable) {
-                Log.e("Network API Error: ", t.message.toString())
-                Log.e("Error: ","network or API call failure")
+            override fun onFailure(call: Call<RiwayatPohonResponse>, t: Throwable) {
+                Log.e("Debug Network API Error: ", t.message.toString())
+                Log.e("Debug Error: ","network or API call failure")
+                Log.e("Debug Error Details: ", t.stackTraceToString())
+                Log.e("Debug Call: ", call.request().toString())
             }
         })
+    }
+
+    fun createMultipartBodyParts(imageUris: List<String>): List<MultipartBody.Part> {
+        val parts = mutableListOf<MultipartBody.Part>()
+        for (uri in imageUris) {
+            val file = File(uri)
+            if (file.exists()) {
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val part = MultipartBody.Part.createFormData("image", file.name, requestFile)
+                parts.add(part)
+            }
+        }
+        return parts
     }
 
     private fun showConfirmDialog(){
@@ -339,6 +402,23 @@ class TambahTargetActivity : AppCompatActivity() {
         editor4.clear().apply()
         editor5.clear().apply()
         kerusakanPreferenceManager.removeData()
+        imagePreferenceManager.removeData()
+    }
+
+    private fun extractFilenameFromMultipartPart(part: MultipartBody.Part): String {
+        val headers = part.headers
+        if (headers != null) {
+            for (i in 0 until headers.size) {
+                if (headers.name(i).equals("Content-Disposition", ignoreCase = true)) {
+                    val headerValue = headers.value(i)
+                    val startIndex = headerValue.indexOf("filename=")
+                    if (startIndex != -1) {
+                        return headerValue.substring(startIndex + 9)
+                    }
+                }
+            }
+        }
+        return "UnknownFilename"
     }
 
     @SuppressLint("MissingSuperCall")

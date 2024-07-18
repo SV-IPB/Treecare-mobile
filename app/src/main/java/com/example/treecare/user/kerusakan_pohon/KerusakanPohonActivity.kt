@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.treecare.R
 import com.example.treecare.adapter.KerusakanAdapter
 import com.example.treecare.interfaces.KerusakanInterface
+import com.example.treecare.service.ImagePreferenceManager
 import com.example.treecare.service.KerusakanPreferenceManager
 import com.example.treecare.service.PreferenceManager
 import com.example.treecare.service.model.RiwayatKerusakanPohonModel
@@ -32,6 +33,7 @@ class KerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
     private val listKerusakan: ArrayList<RiwayatKerusakanPohonModel> = ArrayList()
 
     private lateinit var kerusakanPreferenceManager: KerusakanPreferenceManager
+    private lateinit var imagePreferenceManager: ImagePreferenceManager
     private lateinit var counterPreferences: SharedPreferences
     private var counter:Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,7 @@ class KerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
 
         preferenceManager = PreferenceManager(this)
         kerusakanPreferenceManager = KerusakanPreferenceManager(this)
+        imagePreferenceManager = ImagePreferenceManager(this)
         counterPreferences = getSharedPreferences("kerusakanCounter", Context.MODE_PRIVATE)
         counter = counterPreferences.getInt("counter",-1)
         Log.e("Debug counter list: ", counter.toString())
@@ -55,6 +58,8 @@ class KerusakanPohonActivity : AppCompatActivity(), KerusakanInterface {
         rvKerusakanPohon = findViewById(R.id.rvKerusakanPohon)
 
         val allLists = kerusakanPreferenceManager.getAllLists()
+        val images = imagePreferenceManager.getList("image_urls_list")
+        Log.e("Request Image Path", "list image: $images")
 
         if (counter > 0){
             for ((key, list) in allLists) {

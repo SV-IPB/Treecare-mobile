@@ -45,6 +45,10 @@ data class RiwayatKerusakanPohon (
     @Expose
     var pemangkasan: String? = null,
 
+    @SerializedName("detail_pemangkasan")
+    @Expose
+    var detail_pemangkasan: String? = null,
+
     @SerializedName("pohon_dipindahkan")
     @Expose
     var pohon_dipindahkan: Boolean? = null,

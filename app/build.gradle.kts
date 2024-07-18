@@ -75,6 +75,7 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.2.0")
     implementation ("com.google.mlkit:barcode-scanning:17.2.0")
 
+    implementation ("com.sun.mail:javax.mail:1.6.2")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

@@ -2,147 +2,151 @@ package com.example.treecare.service.api.v1.request
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import okhttp3.MultipartBody
 
 data class RiwayatPohonRequest(
+    @SerializedName("image")
+    @Expose
+    val image: List<MultipartBody.Part>,
+
+    @SerializedName("riwayatKerusakanPohon")
+    @Expose
+    val riwayatKerusakanPohon: MutableList<riwayatKerusakanPohon>,
+
     @SerializedName("keliling")
     @Expose
-    var keliling: Float? = null,
+    val keliling: Float?,
 
     @SerializedName("tinggi")
     @Expose
-    var tinggi: Float? = null,
+    val tinggi: Float?,
 
-    @SerializedName("lebar_tajuk")
+    @SerializedName("lebarTajuk")
     @Expose
-    var lebarTajuk: Float? = null,
+    val lebarTajuk: Float?,
 
     @SerializedName("bentuk")
     @Expose
-    var bentuk: String? = null,
+    val bentuk: String?,
 
-    @SerializedName("live_crown_ratio")
+    @SerializedName("liveCrownRatio")
     @Expose
-    var liveCrownRatio: Int? = null,
+    val liveCrownRatio: Int?,
 
-    @SerializedName("sejarah_pemangkasan")
+    @SerializedName("sejarahPemangkasan")
     @Expose
-    var sejarahPemangkasan: String? = null,
+    val sejarahPemangkasan: String?,
 
-    @SerializedName("warna_daun")
+    @SerializedName("warnaDaun")
     @Expose
-    var warnaDaun: String? = null,
+    val warnaDaun: String?,
 
     @SerializedName("epicormic")
     @Expose
-    var epicormic: Boolean? = null,
+    val epicormic: Boolean?,
 
-    @SerializedName("kerapatan_daun")
+    @SerializedName("kerapatanDaun")
     @Expose
-    var kerapatanDaun: String? = null,
+    val kerapatanDaun: String?,
 
-    @SerializedName("ukuran_daun")
+    @SerializedName("ukuranDaun")
     @Expose
-    var ukuranDaun: String? = null,
+    val ukuranDaun: String?,
 
-    @SerializedName("wound_wood")
+    @SerializedName("woundWood")
     @Expose
-    var woundWood: String? = null,
+    val woundWood: String?,
 
-    @SerializedName("twig_dieback")
+    @SerializedName("twigDieback")
     @Expose
-    var twigDieback: Boolean? = null,
+    val twigDieback: Boolean?,
 
     @SerializedName("vigor")
     @Expose
-    var vigor: String? = null,
+    val vigor: String?,
 
     @SerializedName("hama")
     @Expose
-    var hama: String? = null,
+    val hama: String?,
 
-    @SerializedName("karakteristik_tapak")
+    @SerializedName("karakteristikTapak")
     @Expose
-    var karakteristikTapak: String? = null,
+    val karakteristikTapak: String?,
 
     @SerializedName("gangguan")
     @Expose
-    var gangguan: Boolean? = null,
+    val gangguan: Boolean?,
 
-    @SerializedName("masalah_tanah")
+    @SerializedName("masalahTanah")
     @Expose
-    var masalahTanah: String? = null,
+    val masalahTanah: String?,
 
-    @SerializedName("gangguan_lain")
+    @SerializedName("gangguanLain")
     @Expose
-    var gangguanLain: String? = null,
+    val gangguanLain: String?,
 
-    @SerializedName("pemanfaatan_sekitar")
+    @SerializedName("pemanfaatanSekitar")
     @Expose
-    var pemanfaatanSekitar: String? = null,
+    val pemanfaatanSekitar: String?,
 
-    @SerializedName("dapat_dipindahkan")
+    @SerializedName("dapatDipindahkan")
     @Expose
-    var dapatDipindahkan: Boolean? = null,
+    val dapatDipindahkan: Boolean?,
 
-    @SerializedName("dapat_dibatasi")
+    @SerializedName("dapatDibatasi")
     @Expose
-    var dapatDibatasi: Boolean? = null,
+    val dapatDibatasi: Boolean?,
 
     @SerializedName("hunian")
     @Expose
-    var hunian: String? = null,
-
-    @SerializedName("riwayat_kerusakan_pohon")
-    @Expose
-    var riwayatKerusakanPohon: List<RiwayatKerusakanPohon>? = null,
+    val hunian: String?
 )
-data class RiwayatKerusakanPohon (
-
+data class riwayatKerusakanPohon (
     @SerializedName("gambar")
     @Expose
-    var gambar: List<String>? = null,
-
-    @SerializedName("bagian_pohon")
-    @Expose
-    var bagian_pohon: String? = null,
+    val gambar: List<String>,
 
     @SerializedName("deskripsi")
     @Expose
-    var deskripsi: String? = null,
+    val deskripsi: String,
+
+    @SerializedName("bagian_pohon")
+    @Expose
+    val bagian_pohon: String,
 
     @SerializedName("potensi_kegagalan")
     @Expose
-    var potensi_kegagalan: Int? = null,
+    val potensi_kegagalan: Int,
 
     @SerializedName("ukuran_bagian_pohon")
     @Expose
-    var ukuran_bagian_pohon: Int? = null,
+    val ukuran_bagian_pohon: Int,
 
     @SerializedName("peringkat_target")
     @Expose
-    var peringkat_target: Int? = null,
-
-    @SerializedName("peringkat_bahaya")
-    @Expose
-    var peringkat_bahaya: Int? = null,
+    val peringkat_target: Int,
 
     @SerializedName("butuh_tindakan")
     @Expose
-    var butuh_tindakan: Boolean? = null,
+    val butuh_tindakan: Boolean,
 
     @SerializedName("pemangkasan")
     @Expose
-    var pemangkasan: String? = null,
+    val pemangkasan: String,
+
+    @SerializedName("detail_pemangkasan")
+    @Expose
+    val detail_pemangkasan: String,
 
     @SerializedName("pohon_dipindahkan")
     @Expose
-    var pohon_dipindahkan: Boolean? = null,
+    val pohon_dipindahkan: Boolean,
 
     @SerializedName("target_dipindahkan")
     @Expose
-    var target_dipindahkan: Boolean? = null,
+    val target_dipindahkan: Boolean,
 
     @SerializedName("saran")
     @Expose
-    var saran: String? = null
+    val saran: String
 )

@@ -138,7 +138,7 @@ class DetailKerusakanPohonActivity : AppCompatActivity(), ImageInterface {
                 sPeringkatTarget.text = body?.data?.peringkat_target.toString()
                 tvPBahayaValue.text = body?.data?.peringkat_bahaya.toString()
                 sPemangkasan.text = body?.data?.pemangkasan
-//                etDeskripsiPemangkasan.text = body?.data?.deskripsi
+                etDeskripsiPemangkasan.text = body?.data?.detail_pemangkasan
                 etSaranLainnya.text = body?.data?.saran
 
                 if (body?.data?.butuh_tindakan!!) {

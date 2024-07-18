@@ -48,17 +48,18 @@ class RiwayatPerubahanActivity : AppCompatActivity(), PerubahanInterface {
 
         nomor = intent.getStringExtra("nomor").toString()
         codeResponse = intent.getStringExtra("responseCode").toString()
-        idPohon = intent.getStringExtra("id").toString()
+        idPohon = intent.getStringExtra("idPohon").toString()
 
         val btnBack: ImageView = findViewById(R.id.btnBack)
         rvPerubahan.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rvPerubahan.adapter = RiwayatPerubahanAdapter(this, listPerubahan, this)
 
         btnBack.setOnClickListener {
-//            val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
-//            intent.putExtra("nomor", nomor)
-//            intent.putExtra("responseCode", codeResponse)
-//            startActivity(intent)
+            val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
+            intent.putExtra("nomor", nomor)
+            intent.putExtra("responseCode", codeResponse)
+            intent.putExtra("idPohon",idPohon)
+            startActivity(intent)
             finish()
         }
 
@@ -135,10 +136,11 @@ class RiwayatPerubahanActivity : AppCompatActivity(), PerubahanInterface {
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-//        val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
-//        intent.putExtra("nomor", nomor)
-//        intent.putExtra("responseCode", codeResponse)
-//        startActivity(intent)
+        val intent = Intent(this, DetailIndentitasPohonActivity::class.java)
+        intent.putExtra("nomor", nomor)
+        intent.putExtra("responseCode", codeResponse)
+        intent.putExtra("idPohon",idPohon)
+        startActivity(intent)
         finish()
     }
 
